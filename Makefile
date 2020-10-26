@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-W -std=c89 -pedantic -O3
+CFLAGS=-W -std=c89 -pedantic -O3 -g
 CGRAPH=`pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV`
 ENDFLAGS=`pkg-config --libs-only-l MLV`
 
