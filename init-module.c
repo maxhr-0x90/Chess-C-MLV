@@ -1,6 +1,6 @@
 #include "assets.h"
 
-void init_plateau(Piece *board[8][8], Piece pieces[32]){
+void init_plateau(Piece *board[][8], Piece pieces[32]){
 	int i;
 	vider_plateau(board);
 	placer_pieces(board, pieces);
@@ -8,7 +8,7 @@ void init_plateau(Piece *board[8][8], Piece pieces[32]){
 	init_deplacement(pieces);
 }
 
-void vider_plateau(Piece *board[8][8]){
+void vider_plateau(Piece *board[][8]){
 	int i,j;
 
 	for(i = 0; i < 8; i++){
@@ -18,7 +18,7 @@ void vider_plateau(Piece *board[8][8]){
 	}
 }
 
-void placer_pieces(Piece *board[8][8], Piece pieces[32]){
+void placer_pieces(Piece *board[][8], Piece pieces[32]){
 	int i;
 	for(i = 0; i < 32; i++){
 		pieces[i].posInit.val = 1;
@@ -34,7 +34,7 @@ void placer_pieces(Piece *board[8][8], Piece pieces[32]){
 	}
 }
 
-void init_pieces(Piece *board[8][8]){
+void init_pieces(Piece *board[][8]){
 	int color, i, j;
 	TypePiece rangee[] = {Tour, Cavalier, Fou, Reine, Roi, Fou, Cavalier, Tour};
 
@@ -69,7 +69,6 @@ void deplace_roi(Piece *pieceptr){
 	pieceptr->move.formeL.val = 0;
 	pieceptr->move.limitation = 1;
 	pieceptr->move.ajustement[0] = 0;
-	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_reine(Piece *pieceptr){
@@ -78,7 +77,6 @@ void deplace_reine(Piece *pieceptr){
 	pieceptr->move.formeL.val = 0;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
-	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_tour(Piece *pieceptr){
@@ -87,7 +85,6 @@ void deplace_tour(Piece *pieceptr){
 	pieceptr->move.formeL.val = 0;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
-	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_fou(Piece *pieceptr){
@@ -96,7 +93,6 @@ void deplace_fou(Piece *pieceptr){
 	pieceptr->move.formeL.val = 0;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
-	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_cavalier(Piece *pieceptr){
@@ -105,7 +101,6 @@ void deplace_cavalier(Piece *pieceptr){
 	pieceptr->move.formeL.val = 1;
 	pieceptr->move.limitation = 0;
 	pieceptr->move.ajustement[0] = 0;
-	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_pion(Piece *pieceptr){

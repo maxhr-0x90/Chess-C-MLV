@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
+#define CASE 50
 
 /*-------------------Définitions de types------------------------*/
 
@@ -44,6 +45,8 @@ typedef struct
 
 /*--------------------Module de vérification-----------------------*/
 
+int est_piece(Piece *board[][8], Coord pos);
+int est_legal(Piece *board[][8], Coord pos, Coord target);
 
 /*-----------------------Module graphique--------------------------*/
 
@@ -54,16 +57,16 @@ Coord clic();
 
 /*--------------------Module d'initialisation----------------------*/
 
-void init_plateau(Piece *board[8][8], Piece pieces[32]);
-void vider_plateau(Piece *board[8][8]);
-void placer_pieces(Piece *board[8][8], Piece pieces[32]);
-void init_pieces(Piece *board[8][8]);
+void init_plateau(Piece *board[][8], Piece pieces[32]);
+void vider_plateau(Piece *board[][8]);
+void placer_pieces(Piece *board[][8], Piece pieces[32]);
+void init_pieces(Piece *board[][8]);
 void init_deplacement(Piece pieces[32]);
 
 /*fonctions d'initialisation des déplacements*/
-void deplace_roi(Piece *pieceptr);
-void deplace_reine(Piece *pieceptr);
-void deplace_tour(Piece *pieceptr);
-void deplace_fou(Piece *pieceptr);
-void deplace_cavalier(Piece *pieceptr);
-void deplace_pion(Piece *pieceptr);
+/**/void deplace_roi(Piece *pieceptr);
+/**/void deplace_reine(Piece *pieceptr);
+/**/void deplace_tour(Piece *pieceptr);
+/**/void deplace_fou(Piece *pieceptr);
+/**/void deplace_cavalier(Piece *pieceptr);
+/**/void deplace_pion(Piece *pieceptr);
