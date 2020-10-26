@@ -35,7 +35,7 @@ void placer_pieces(Piece *board[8][8], Piece pieces[32]){
 
 void init_pieces(Piece *board[8][8]){
 	int color, i, j;
-	TypePiece rangee[] = {Tour, Cavalier, Fou, Roi, Reine, Fou, Cavalier, Tour};
+	TypePiece rangee[] = {Tour, Cavalier, Fou, Reine, Roi, Fou, Cavalier, Tour};
 
 	for(color = 0; color < 2; color++){
 		for(i = 0; i < 8; i++){
@@ -47,4 +47,64 @@ void init_pieces(Piece *board[8][8]){
 		}
 	}
 
+void init_deplacemet(Piece pieces[32]){
+	int i;
+	for(i = 0; i < 32; i++){
+		switch(pieces[i]){
+			case Roi: deplace_roi(&pieces[i]);break;
+			case Reine: deplace_reine(&pieces[i]);break;
+			case Tour: deplace_tour(&pieces[i]);break;
+			case Fou: deplace_fou(&pieces[i]);break;
+			case Cavalier: deplace_cavalier(&pieces[i]);break;
+			case Pion: deplace_pion(&pieces[i]);break;
+		}
+	}
+}
+
+void deplace_roi(Piece *pieceptr){
+	pieceptr->move->droit = 1;
+	pieceptr->move->diagonal = 1;
+	pieceptr->move->formeL = 0;
+	pieceptr->move->limitation = 1;
+	pieceptr->move->ajustement = {0,'\0'};
+}
+
+void deplace_reine(Piece *pieceptr){
+	pieceptr->move->droit = 1;
+	pieceptr->move->diagonal = 1;
+	pieceptr->move->formeL = 0;
+	pieceptr->move->limitation = 8;
+	pieceptr->move->ajustement = {0,'\0'};
+}
+
+void deplace_tour(Piece *pieceptr){
+	pieceptr->move->droit = 1;
+	pieceptr->move->diagonal = 0;
+	pieceptr->move->formeL = 0;
+	pieceptr->move->limitation = 8;
+	pieceptr->move->ajustement = {0,'\0'};
+}
+
+void deplace_fou(Piece *pieceptr){
+	pieceptr->move->droit = 0;
+	pieceptr->move->diagonal = 1;
+	pieceptr->move->formeL = 0;
+	pieceptr->move->limitation = 8;
+	pieceptr->move->ajustement = {0,'\0'};
+}
+
+void deplace_cavalier(Piece *pieceptr){
+	pieceptr->move->droit = 0;
+	pieceptr->move->diagonal = 0;
+	pieceptr->move->formeL = 1;
+	pieceptr->move->limitation = 0;
+	pieceptr->move->ajustement = {0,'\0'};
+}
+
+void deplace_pion(Piece *pieceptr){
+	pieceptr->move->droit = 0;
+	pieceptr->move->diagonal = 0;
+	pieceptr->move->formeL = 0;
+	pieceptr->move->limitation = 0;
+	pieceptr->move->ajustement = {2,'f'};
 }
