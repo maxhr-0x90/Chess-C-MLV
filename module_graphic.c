@@ -5,7 +5,6 @@
 /* Fonction ayant pour but de dessiner le damier de l'échiquier*/
 void make_grid(){
   int x, y;
-  MLV_draw_filled_rectangle(0, 0, CASE*8, CASE*8, MLV_COLOR_GREY15);
   for(y = 0; y < 8; y++)
     for(x = 0; x < 8; x++){
       MLV_draw_filled_rectangle( x*CASE*2, y*CASE*2, CASE, CASE, MLV_COLOR_WHITE);
@@ -19,6 +18,7 @@ void color_piece(Piece *board[][8]){
 	char path[25];
 	char *folder = "ressources/";
 	char *ext = ".png";
+	char color[][2] = {"B", "N"};
 	char images_tab[][5] = {"roi", "dame", "tour", "fou", "cava", "pion"};
 	MLV_Image *image;
 
@@ -27,6 +27,7 @@ void color_piece(Piece *board[][8]){
       if(board[i][j] != NULL){
 				strcpy(path, folder);
 				strcat(path, images_tab[board[i][j]->rang]);
+				strcat(path, color[board[i][j]->couleur]);
 				strcat(path, ext);
 				image = MLV_load_image(path);
 
