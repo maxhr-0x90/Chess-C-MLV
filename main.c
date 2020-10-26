@@ -1,3 +1,6 @@
 #include "assets.h"
 
-int(main)
+int(main)(){
+  printf("hello world\n");
+  exit(0);
+}
