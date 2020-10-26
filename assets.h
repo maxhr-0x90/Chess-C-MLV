@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
-#define CASE 50
+#include <string.h>
+
+#define CASE 96
 
 /*-------------------Définitions de types------------------------*/
 

@@ -16,13 +16,25 @@ void make_grid(){
 /* Fonction ayant pour but de placer les pièces de manière graphique sur le plateau.*/
 void color_piece(Piece *board[][8]){
   int i, j;
-  MLV_Font* police = MLV_load_font("DejaVuSans.ttf", CASE/2);
-  char echecs[9][5] = {"R", "Re", "T", "F", "C", "P"};
+	char path[25];
+	char *folder = "ressources/";
+	char *ext = ".png";
+	char images_tab[][5] = {"roi", "dame", "tour", "fou", "cava", "pion"};
+	MLV_Image *image;
 
-  for(i = 0; i < 8; i++)
-    for(j = 0; j < 8; j++)
-      if(board[i][j] != NULL)
-        MLV_draw_text_with_font(CASE/7+j*CASE, CASE/10+i*CASE, echecs[board[i][j]->rang], police, MLV_COLOR_BLACK);
+  for(i = 0; i < 8; i++){
+    for(j = 0; j < 8; j++){
+      if(board[i][j] != NULL){
+				strcpy(path, folder);
+				strcat(path, images_tab[board[i][j]->rang]);
+				strcat(path, ext);
+				image = MLV_load_image(path);
+
+        MLV_draw_image(image, CASE*j, CASE*i);
+				path[0] = '\0';
+			}
+		}
+	}
   MLV_actualise_window();
 }
 
