@@ -17,7 +17,17 @@ int(main)(){
     while(!(est_piece(board, pos)))
       pos = clic();
 
+    for(i = 0; i<8; i++){
+      moves[i] = 0;
+    }
+    moves_possible(board, pos, moves);
+    for (i = 0; i < 8; i++) {
+      printf("%d ", moves[i]);
+    }
+    printf("\n");
+
     target = clic();
+
     if(est_legal(board, pos, target)){
       board[target.y][target.x] = board[pos.y][pos.x];
       board[pos.y][pos.x] = NULL;
