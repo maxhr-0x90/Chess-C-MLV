@@ -119,128 +119,163 @@ int depasse_piece(Piece *board[][8], Coord pos, Coord target, Coord deplace){
   return 0;
 }
 
-void moves_possible(Piece *board[][8], Coord pos, int *moves){
+void formeL_posssible(Piece *board[][8], Coord pos, int *moves){
+  int i, swp;
+  Coord dec;
+  Coord tmp;
+
+  /*initialisation du vecteur dec, valeur de decalages*/
+  dec.x = 1;
+  dec.y = -2;
+  for (i = 0; i < 8; i+=2) {
+    tmp.x = pos.x + dec.x;
+    tmp.y = pos.y + dec.y;
+    moves[i] = (!en_dehors(tmp) && !sur_allie(board, pos, tmp)) * -1;
+
+    /*Rotation de 90° du vecteur dec*/
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+
+  /*initialisation du vecteur dec, valeur de decalages*/
+  dec.x = 2;
+  dec.y = -1;
+  for (i = 1; i < 8; i+=2) {
+    tmp.x = pos.x + dec.x;
+    tmp.y = pos.y + dec.y;
+    moves[i] = (!en_dehors(tmp) && !sur_allie(board, pos, tmp)) * -1;
+
+    /*Rotation de 90° du vecteur dec*/
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+}
+
+void droit_posssible(Piece *board[][8], Coord pos, int *moves){
   int i, j, valide, swp;
   Coord dec;
   Coord tmp;
 
+  /*initialisation du vecteur dec, valeur de decalages*/
+  dec.x = 0;
+  dec.y = -1;
+
+  for (i = 0; i < 8; i+=2) {
+    valide = 1;
+    tmp = pos;
+    j = 0;
+    while (valide && j < board[pos.y][pos.x]->move.limitation) {
+      tmp.x = tmp.x + dec.x;
+      tmp.y = tmp.y + dec.y;
+      valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
+      if(valide){
+        moves[i]++;
+      }
+      j++;
+    }
+
+    /*Rotation de 90° du vecteur dec*/
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+}
+
+void diagonal_posssible(Piece *board[][8], Coord pos, int *moves){
+  int i, j, valide, swp;
+  Coord dec;
+  Coord tmp;
+
+  /*initialisation du vecteur dec, valeur de decalages*/
+  dec.x = 1;
+  dec.y = -1;
+
+  for (i = 1; i < 8; i+=2) {
+    valide = 1;
+    tmp = pos;
+    j = 0;
+    while (valide && j < board[pos.y][pos.x]->move.limitation) {
+      tmp.x = tmp.x + dec.x;
+      tmp.y = tmp.y + dec.y;
+      valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
+      if(valide){
+        moves[i]++;
+      }
+      j++;
+    }
+
+    /*Rotation de 90° du vecteur dec*/
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+}
+
+void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves){
+  int i, j;
+  Coord tmp;
+
+  if (board[pos.y][pos.x]->couleur == Blanc) {
+    i = 1;
+    tmp.x = pos.x;
+    tmp.y = pos.y - i;
+    while (!en_dehors(tmp) && board[tmp.y][tmp.x] == NULL && i <= board[pos.y][pos.x]->move.ajustement[0]) {
+      moves[0]++;
+      i++;
+      tmp.y = pos.y - i;
+    }
+
+    tmp.x = pos.x - 1;
+    tmp.y = pos.y - 1;
+    if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y - 1][pos.x - 1]->couleur == Noir){
+      moves[7] = 1;
+    }
+
+    tmp.x = pos.x + 1;
+    if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y - 1][pos.x + 1]->couleur == Noir){
+      moves[1] = 1;
+    }
+  }
+
+  if (board[pos.y][pos.x]->couleur == Noir) {
+    i = 1;
+    tmp.x = pos.x;
+    tmp.y = pos.y + i;
+    while (!en_dehors(tmp) && board[tmp.y][tmp.x] == NULL && i <= board[pos.y][pos.x]->move.ajustement[0]) {
+      moves[4]++;
+      i++;
+      tmp.y = pos.y + i;
+    }
+
+    tmp.x = pos.x - 1;
+    tmp.y = pos.y + 1;
+    if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y + 1][pos.x - 1]->couleur == Blanc){
+      moves[5] = 1;
+    }
+
+    tmp.x = pos.x + 1;
+    if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y + 1][pos.x + 1]->couleur == Blanc){
+      moves[3] = 1;
+    }
+  }
+}
+
+void moves_possible(Piece *board[][8], Coord pos, int *moves){
   if(board[pos.y][pos.x]->move.formeL.val){
-    dec.x = 1;
-    dec.y = -2;
-    for (i = 0; i < 8; i+=2) {
-      tmp.x = pos.x + dec.x;
-      tmp.y = pos.y + dec.y;
-      moves[i] = (!en_dehors(tmp) && !sur_allie(board, pos, tmp)) * -1;
-
-      swp = dec.x;
-      dec.x = -dec.y;
-      dec.y = swp;
-    }
-
-    dec.x = 2;
-    dec.y = -1;
-    for (i = 1; i < 8; i+=2) {
-      tmp.x = pos.x + dec.x;
-      tmp.y = pos.y + dec.y;
-      moves[i] = (!en_dehors(tmp) && !sur_allie(board, pos, tmp)) * -1;
-
-      swp = dec.x;
-      dec.x = -dec.y;
-      dec.y = swp;
-    }
+    formeL_posssible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.droit.val){
-    dec.x = 0;
-    dec.y = -1;
-
-    for (i = 0; i < 8; i+=2) {
-      valide = 1;
-      tmp = pos;
-      j = 0;
-      while (valide && j < board[pos.y][pos.x]->move.limitation) {
-        tmp.x = tmp.x + dec.x;
-        tmp.y = tmp.y + dec.y;
-        valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
-        if(valide){
-          moves[i]++;
-        }
-        j++;
-      }
-
-      swp = dec.x;
-      dec.x = -dec.y;
-      dec.y = swp;
-    }
+    droit_posssible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.diagonal.val){
-    dec.x = 1;
-    dec.y = -1;
-
-    for (i = 1; i < 8; i+=2) {
-      valide = 1;
-      tmp = pos;
-      j = 0;
-      while (valide && j < board[pos.y][pos.x]->move.limitation) {
-        tmp.x = tmp.x + dec.x;
-        tmp.y = tmp.y + dec.y;
-        valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
-        if(valide){
-          moves[i]++;
-        }
-        j++;
-      }
-
-      swp = dec.x;
-      dec.x = -dec.y;
-      dec.y = swp;
-    }
+    diagonal_posssible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
-    if (board[pos.y][pos.x]->couleur == Blanc) {
-      i = 1;
-      tmp.x = pos.x;
-      tmp.y = pos.y - i;
-      while (!en_dehors(tmp) && board[tmp.y][tmp.x] == NULL && i <= board[pos.y][pos.x]->move.ajustement[0]) {
-        moves[0]++;
-        i++;
-        tmp.y = pos.y - i;
-      }
-
-      tmp.x = pos.x - 1;
-      tmp.y = pos.y - 1;
-      if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y - 1][pos.x - 1]->couleur == Noir){
-        moves[7] = 1;
-      }
-
-      tmp.x = pos.x + 1;
-      if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y - 1][pos.x + 1]->couleur == Noir){
-        moves[1] = 1;
-      }
-    }
-
-    if (board[pos.y][pos.x]->couleur == Noir) {
-      i = 1;
-      tmp.x = pos.x;
-      tmp.y = pos.y + i;
-      while (!en_dehors(tmp) && board[tmp.y][tmp.x] == NULL && i <= board[pos.y][pos.x]->move.ajustement[0]) {
-        moves[4]++;
-        i++;
-        tmp.y = pos.y + i;
-      }
-
-      tmp.x = pos.x - 1;
-      tmp.y = pos.y + 1;
-      if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y + 1][pos.x - 1]->couleur == Blanc){
-        moves[5] = 1;
-      }
-
-      tmp.x = pos.x + 1;
-      if (!en_dehors(tmp) && board[tmp.y][tmp.x] != NULL && board[pos.y + 1][pos.x + 1]->couleur == Blanc){
-        moves[3] = 1;
-      }
-    }
+    ajustement_p_posssible(board, pos, moves);
   }
 }

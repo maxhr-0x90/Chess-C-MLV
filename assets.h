@@ -53,6 +53,11 @@ void legal_droit(Piece *board[][8], Coord pos, Coord target, int* verif);
 void legal_diag(Piece *board[][8], Coord pos, Coord target, int* verif);
 void legal_ajustement_f(Piece *board[][8], Coord pos, Coord target, int* verif);
 int est_legal(Piece *board[][8], Coord pos, Coord target);
+void formeL_posssible(Piece *board[][8], Coord pos, int *moves);
+void droit_posssible(Piece *board[][8], Coord pos, int *moves);
+void diagonal_posssible(Piece *board[][8], Coord pos, int *moves);
+void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves);
+void moves_possible(Piece *board[][8], Coord pos, int *moves);
 
 /*-----------------------Module graphique--------------------------*/
 
