@@ -142,6 +142,7 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
         tmp.x = tmp.x + dec.x;
         tmp.y = tmp.y + dec.y;
         valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
+        moves[i]++;
       }
 
       swp = dec.x;
@@ -153,13 +154,14 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   if(board[pos.y][pos.x]->move.diagonal.val){
     dec = {1, -1};
 
-    for (i = 0; i < 8; i+=2) {
+    for (i = 1; i < 8; i+=2) {
       valide = 1;
       tmp = pos;
       while (valide && j < board[pos.y][pos.x]->move.limitation) {
         tmp.x = tmp.x + dec.x;
         tmp.y = tmp.y + dec.y;
         valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
+        moves[i]++;
       }
 
       swp = dec.x;
@@ -169,6 +171,36 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   }
 
   if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
+    if (board[pos.y][pos.x]->couleur == Blanc) {
+      i = 1;
+      while (board[pos.y - i][pos.x] == NULL && i < board[pos.y][pos.x]->move.ajustement[0]) {
+        move[0]++;
+        i++;
+      }
 
+      if (board[pos.y - 1][pos.x - 1] != NULL && board[pos.y - 1][pos.x - 1]->couleur == Noir){
+        move[8] = 1;
+      }
+
+      if (board[pos.y - 1][pos.x + 1] != NULL && board[pos.y - 1][pos.x + 1]->couleur == Noir){
+        move[1] = 1;
+      }
+    }
+
+    if (board[pos.y][pos.x]->couleur == Noir) {
+      i = 1;
+      while (board[pos.y + i][pos.x] == NULL && i < board[pos.y][pos.x]->move.ajustement[0]) {
+        move[4]++;
+        i++;
+      }
+
+      if (board[pos.y + 1][pos.x - 1] != NULL && board[pos.y + 1][pos.x - 1]->couleur == Noir){
+        move[5] = 1;
+      }
+
+      if (board[pos.y + 1][pos.x + 1] != NULL && board[pos.y + 1][pos.x + 1]->couleur == Noir){
+        move[3] = 1;
+      }
+    }
   }
 }
