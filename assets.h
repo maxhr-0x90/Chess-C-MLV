@@ -48,6 +48,10 @@ typedef struct
 /*--------------------Module de vérification-----------------------*/
 
 int est_piece(Piece *board[][8], Coord pos);
+void legal_L(Piece *board[][8], Coord pos, Coord target, int* verif);
+void legal_droit(Piece *board[][8], Coord pos, Coord target, int* verif);
+void legal_diag(Piece *board[][8], Coord pos, Coord target, int* verif);
+void legal_ajustement_f(Piece *board[][8], Coord pos, Coord target, int* verif);
 int est_legal(Piece *board[][8], Coord pos, Coord target);
 
 /*-----------------------Module graphique--------------------------*/
