@@ -58,7 +58,8 @@ int est_legal(Piece *board[][8], Coord pos, Coord target);
 
 void make_grid();
 void color_piece();
-void actualise_plateau(Piece *board[][8]);
+void indic_deplace(Coord pos, int *moves);
+void actualise_plateau(Piece *board[][8], Coord pos, int *moves);
 Coord clic();
 
 /*--------------------Module d'initialisation----------------------*/

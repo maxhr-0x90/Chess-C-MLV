@@ -11,7 +11,7 @@ int(main)(){
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*8);
   init_plateau(board, set_piece);
-  actualise_plateau(board);
+  actualise_plateau(board, pos, moves);
   while(1){
     pos = clic();
     while(!(est_piece(board, pos)))
@@ -25,15 +25,16 @@ int(main)(){
       printf("%d ", moves[i]);
     }
     printf("\n");
+    actualise_plateau(board, pos, moves);
 
     target = clic();
 
     if(est_legal(board, pos, target)){
       board[target.y][target.x] = board[pos.y][pos.x];
       board[pos.y][pos.x] = NULL;
-      actualise_plateau(board);
+      actualise_plateau(board, pos, moves);
     }
-    actualise_plateau(board);
+    actualise_plateau(board, pos, moves);
   }
 
   MLV_wait_seconds(100);

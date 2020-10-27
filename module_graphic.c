@@ -40,10 +40,58 @@ void color_piece(Piece *board[][8]){
   MLV_actualise_window();
 }
 
+int sgn(int i){
+  if (i > 0) {
+    return 1;
+  } else if (i < 0) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+void indic_deplace(Coord pos, int *moves){
+  int i, j, swp;
+  Coord dec = {0, -1};
+  for (i = 0; i < 8; i++) {
+    for (j = 1; j <= moves[i]; j++) {
+      MLV_draw_filled_circle(CASE*(dec.x*j + pos.x)+CASE/2, CASE*(dec.y*j + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+    }
+    swp = dec.x;
+    dec.x = sgn(swp - dec.y);
+    dec.y = sgn(swp + dec.y);
+  }
+
+  dec.x = 1;
+  dec.y = -2;
+  for (i = 0; i < 8; i+=2) {
+    if (moves[i] == -1) {
+      MLV_draw_filled_circle(CASE*(dec.x*j + pos.x)+CASE/2, CASE*(dec.y*j + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+    }
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+
+  dec.x = 2;
+  dec.y = -1;
+  for (i = 1; i < 8; i+=2) {
+    if (moves[i] == -1) {
+      MLV_draw_filled_circle(CASE*(dec.x*j + pos.x)+CASE/2, CASE*(dec.y*j + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+    }
+    swp = dec.x;
+    dec.x = -dec.y;
+    dec.y = swp;
+  }
+
+  MLV_actualise_window();
+}
+
 /* Fonction ayant pour but d'actualiser le plateau de manière graphique en prenant en compte la matrice*/
-void actualise_plateau(Piece *board[][8]){
+void actualise_plateau(Piece *board[][8], Coord pos, int *moves){
   make_grid();
   color_piece(board);
+  indic_deplace(pos, moves);
 }
 
 /*GESTION DU CLIC*/
