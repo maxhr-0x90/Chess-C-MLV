@@ -19,4 +19,4 @@ init-module.o : init-module.c
 	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) init-module.c
 
 clean :
-	rm -f *.o
+	rm -rf *.o
