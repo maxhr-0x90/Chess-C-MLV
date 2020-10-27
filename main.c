@@ -21,10 +21,6 @@ int(main)(){
       moves[i] = 0;
     }
     moves_possible(board, pos, moves);
-    for (i = 0; i < 8; i++) {
-      printf("%d ", moves[i]);
-    }
-    printf("\n");
     actualise_plateau(board, pos, moves);
 
     target = clic();
