@@ -121,7 +121,6 @@ int depasse_piece(Piece *board[][8], Coord pos, Coord target, Coord deplace){
 
 void moves_possible(Piece *board[][8], Coord pos, int *moves){
   int i, j, valide, swp;
-  int pos_cava[] = {1, 2, 2, 1, -1, -2, -2, -1};
   Coord dec;
   Coord tmp;
 
