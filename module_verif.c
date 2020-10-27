@@ -111,18 +111,18 @@ int sur_allie(Piece *board[][8], Coord pos, Coord target){
   return 1;
 }
 
-int depasse_piece(Piece *board[][8], Coord prev_target){
-  if(board[prev_target.y][prev_target.x] != NULL){
+int depasse_piece(Piece *board[][8], Coord pos, Coord target, Coord deplace){
+  if(!(pos.x == (target.x - deplace.x) && pos.y == (target.y - deplace.y)) &&
+   board[target.x - deplace.x][target.y - deplace.y] != NULL){
     return 1;
   }
   return 0;
 }
 
 void moves_possible(Piece *board[][8], Coord pos, int *moves){
-  int i, j;
+  int i, j, valide, swp;
   int pos_cava[] = {1, 2, 2, 1, -1, -2, -2, -1};
-  int dec[] = {0, -1, 1, 0, 0, 1, -1, 0};
-  int valide;
+  Coord dec;
   Coord tmp;
 
   if(board[pos.y][pos.x]->move.formeL.val){
@@ -133,18 +133,39 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   }
 
   if(board[pos.y][pos.x]->move.droit.val){
+    dec = {0, -1};
+
     for (i = 0; i < 8; i+=2) {
       valide = 1;
       tmp = pos;
       while (valide && j < board[pos.y][pos.x]->move.limitation) {
-        tmp.x = dec[i*2];
-        tmp.y = dec[i*2 + 1];
-        valide = en_dehors(tmp) && sur_allie(board, pos, tmp) && depasse_piece(board, tmp, );
+        tmp.x = tmp.x + dec.x;
+        tmp.y = tmp.y + dec.y;
+        valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
       }
+
+      swp = dec.x;
+      dec.x = -dec.y;
+      dec.y = dec.x;
     }
   }
 
   if(board[pos.y][pos.x]->move.diagonal.val){
+    dec = {1, -1};
+
+    for (i = 0; i < 8; i+=2) {
+      valide = 1;
+      tmp = pos;
+      while (valide && j < board[pos.y][pos.x]->move.limitation) {
+        tmp.x = tmp.x + dec.x;
+        tmp.y = tmp.y + dec.y;
+        valide = !en_dehors(tmp) && !sur_allie(board, pos, tmp) && !depasse_piece(board, pos, tmp, dec);
+      }
+
+      swp = dec.x;
+      dec.x = -dec.y;
+      dec.y = dec.x;
+    }
   }
 
   if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
