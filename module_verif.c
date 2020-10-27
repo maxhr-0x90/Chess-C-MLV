@@ -40,17 +40,15 @@ void legal_diag(Piece *board[][8], Coord pos, Coord target, int* verif){
 void legal_ajustement_f(Piece *board[][8], Coord pos, Coord target, int* verif){
   if(pos.x == target.x){
     if(board[pos.y][pos.x]->couleur == Blanc
-       && pos.y - target.y <= board[pos.y][pos.x]->move.ajustement[0]
-       && pos.y - target.y > 0
-       && board[pos.y-1][pos.x] == NULL){
-      board[pos.y][pos.x]->move.ajustement[0] = 1;
-      *verif = 1;
+     && pos.y - target.y <= board[pos.y][pos.x]->move.ajustement[0]
+     && pos.y - target.y > 0
+     && board[pos.y-1][pos.x] == NULL){
+        *verif = 1;
     }
     if(board[pos.y][pos.x]->couleur == Noir
-       && target.y - pos.y <= board[pos.y][pos.x]->move.ajustement[0]
-       && target.y - pos.y > 0
-       && board[pos.y+1][pos.x] == NULL){
-      board[pos.y][pos.x]->move.ajustement[0] = 1;
+     && target.y - pos.y <= board[pos.y][pos.x]->move.ajustement[0]
+     && target.y - pos.y > 0
+     && board[pos.y+1][pos.x] == NULL){
         *verif = 1;
     }
   }
@@ -88,9 +86,68 @@ int est_legal(Piece *board[][8], Coord pos, Coord target){
       legal_diag(board, pos, target, &verif);
     }
 
-    if(board[pos.y][pos.x]->move.ajustement[1] = 'f'){
+    if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
       legal_ajustement_f(board, pos, target, &verif);
+      if(verif == 1){
+        board[pos.y][pos.x]->move.ajustement[0] = 1;
+      }
     }
   }
  return verif;
+}
+
+int en_dehors(Coord pos){
+  if (pos.x >= 0 && pos.x <= 7 && pos.y >= 0 && pos.y <= 7) {
+    return 1;
+  }
+  return 0;
+}
+
+int sur_allie(Piece *board[][8], Coord pos, Coord target){
+  if(board[target.y][target.x] == NULL
+    || board[target.y][target.x]->couleur != board[pos.y][pos.x]->couleur){
+    return 0;
+  }
+  return 1;
+}
+
+int depasse_piece(Piece *board[][8], Coord prev_target){
+  if(board[prev_target.y][prev_target.x] != NULL){
+    return 1;
+  }
+  return 0;
+}
+
+void moves_possible(Piece *board[][8], Coord pos, int *moves){
+  int i, j;
+  int pos_cava[] = {1, 2, 2, 1, -1, -2, -2, -1};
+  int dec[] = {0, -1, 1, 0, 0, 1, -1, 0};
+  int valide;
+  Coord tmp;
+
+  if(board[pos.y][pos.x]->move.formeL.val){
+    for (i = 0; i < 8; i++) {
+      tmp = {pos.x + pos_cava[i], pos.y + pos_cava[(i-2) % 8]}
+      moves[i] = en_dehors(tmp) && sur_allie(board, pos, tmp);
+    }
+  }
+
+  if(board[pos.y][pos.x]->move.droit.val){
+    for (i = 0; i < 8; i+=2) {
+      valide = 1;
+      tmp = pos;
+      while (valide && j < board[pos.y][pos.x]->move.limitation) {
+        tmp.x = dec[i*2];
+        tmp.y = dec[i*2 + 1];
+        valide = en_dehors(tmp) && sur_allie(board, pos, tmp) && depasse_piece(board, tmp, );
+      }
+    }
+  }
+
+  if(board[pos.y][pos.x]->move.diagonal.val){
+  }
+
+  if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
+
+  }
 }

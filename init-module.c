@@ -109,5 +109,5 @@ void deplace_pion(Piece *pieceptr){
 	pieceptr->move.formeL.val = 0;
 	pieceptr->move.limitation = 0;
 	pieceptr->move.ajustement[0] = 2;
-	pieceptr->move.ajustement[1] = 'f';
+	pieceptr->move.ajustement[1] = 'p';
 }

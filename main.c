@@ -4,6 +4,10 @@ int(main)(){
   Piece *board[8][8];
   Piece set_piece[32];
   Coord pos, target;
+  int i, moves[8];
+  for(i = 0; i<8; i++){
+    moves[i] = 0;
+  }
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*8);
   init_plateau(board, set_piece);
