@@ -21,15 +21,20 @@ int(main)(){
       moves[i] = 0;
     }
     moves_possible(board, pos, moves);
+    if(est_mortel(board, pos)){
+      printf("est mortel\n");
+    }
+    else{
+      printf("est pas mortel\n");
+    }
     actualise_plateau(board, pos, moves);
 
     target = clic();
-
-    if(est_legal(board, pos, target)){
-      board[target.y][target.x] = board[pos.y][pos.x];
-      board[pos.y][pos.x] = NULL;
-      actualise_plateau(board, pos, moves);
-    }
+      while(est_piece(board, target) && board[target.y][target.x]->couleur == board[pos.y][pos.x]->couleur){
+        target = clic();
+      }
+    board[target.y][target.x] = board[pos.y][pos.x];
+    board[pos.y][pos.x] = NULL;
     actualise_plateau(board, pos, moves);
   }
 
