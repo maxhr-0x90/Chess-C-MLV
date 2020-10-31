@@ -8,94 +8,6 @@ int est_piece(Piece *board[][8], Coord pos){
   }
 }
 
-void legal_L(Piece *board[][8], Coord pos, Coord target, int* verif){
-  if(pos.x == target.x-2 || pos.x == target.x+2){
-    if(pos.y == target.y-1 || pos.y == target.y+1){
-      *verif = 1;
-    }
-  }
-
-  if(pos.x == target.x-1 || pos.x == target.x+1){
-    if(pos.y == target.y-2 || pos.y == target.y+2){
-      *verif = 1;
-    }
-  }
-}
-
-void legal_droit(Piece *board[][8], Coord pos, Coord target, int* verif){
-  if(pos.x == target.x || pos.y == target.y){
-    if(abs(pos.x-target.x) <= board[pos.y][pos.x]->move.limitation &&
-       abs(pos.y-target.y) <= board[pos.y][pos.x]->move.limitation ){
-         *verif = 1;
-    }
-  }
-}
-
-void legal_diag(Piece *board[][8], Coord pos, Coord target, int* verif){
-  if(abs(pos.x-target.x) == abs(pos.y-target.y) && abs(pos.y-target.y) <= board[pos.y][pos.x]->move.limitation){
-    *verif = 1;
-  }
-}
-
-void legal_ajustement_f(Piece *board[][8], Coord pos, Coord target, int* verif){
-  if(pos.x == target.x){
-    if(board[pos.y][pos.x]->couleur == Blanc
-     && pos.y - target.y <= board[pos.y][pos.x]->move.ajustement[0]
-     && pos.y - target.y > 0
-     && board[pos.y-1][pos.x] == NULL){
-        *verif = 1;
-    }
-    if(board[pos.y][pos.x]->couleur == Noir
-     && target.y - pos.y <= board[pos.y][pos.x]->move.ajustement[0]
-     && target.y - pos.y > 0
-     && board[pos.y+1][pos.x] == NULL){
-        *verif = 1;
-    }
-  }
-  if(pos.x == target.x - 1 || pos.x == target.x + 1){
-    printf("ok\n");
-    if(board[pos.y][pos.x]->couleur == Blanc
-       && pos.y == target.y + 1
-       && board[target.y][target.x] != NULL){
-         *verif = 1;
-    }
-    if(board[pos.y][pos.x]->couleur == Noir
-       && pos.y == target.y - 1
-       && board[target.y][target.x] != NULL){
-         *verif = 1;
-    }
-  }
-}
-
-int est_legal(Piece *board[][8], Coord pos, Coord target){
-  int i, j, verif;
-  verif = 0;
-
-  if(board[target.y][target.x] == NULL ||
-     board[target.y][target.x]->couleur != board[pos.y][pos.x]->couleur){
-
-    if(board[pos.y][pos.x]->move.formeL.val){
-      legal_L(board, pos, target, &verif);
-    }
-
-    if(board[pos.y][pos.x]->move.droit.val){
-      legal_droit(board, pos, target, &verif);
-    }
-
-    if(board[pos.y][pos.x]->move.diagonal.val){
-      legal_diag(board, pos, target, &verif);
-    }
-
-    if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
-      legal_ajustement_f(board, pos, target, &verif);
-      if(verif == 1){
-        board[pos.y][pos.x]->move.ajustement[0] = 1;
-      }
-    }
-  }
- return verif;
-}
-
 int en_dehors(Coord pos){
   if (pos.x >= 0 && pos.x <= 7 && pos.y >= 0 && pos.y <= 7) {
     return 0;
@@ -214,7 +126,7 @@ void diagonal_posssible(Piece *board[][8], Coord pos, int *moves){
 }
 
 void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves){
-  int i, j;
+  int i;
   Coord tmp;
 
   if (board[pos.y][pos.x]->couleur == Blanc) {
@@ -278,4 +190,80 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
     ajustement_p_posssible(board, pos, moves);
   }
+}
+
+int est_mortel(Piece *board[][8], Coord pos){
+  int i, j, x, moves[8];
+  Coord enemy;
+
+  printf("%d %d\n", pos.x, pos.y);
+
+  for(i = 0; i < 8; i++){
+    for(j = 0; j < 8; j++){
+      if(board[i][j] != NULL && board[pos.y][pos.x]->couleur !=board[i][j]->couleur){
+
+        printf("%d, %d\n", i, j);
+        enemy.x = j;
+        enemy.y = i;
+
+        for(x = 0; x < 8; x++){
+          moves[x] = 0;
+        }
+        moves_possible(board, enemy, moves);
+        for(x = 0; x < 8; x++){
+          printf("%d ", moves[x]);
+        }
+        printf("\n");
+        for(x = 0; x < 8; x++){
+          if(pos.x < enemy.x){
+            if(pos.y < enemy.y){
+              if(moves[7] >= (enemy.y-pos.y) && (enemy.y-pos.y) == (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+            if(pos.y == enemy.y){
+              if(moves[6] >= (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+            if(pos.y > enemy.y){
+              if(moves[5] >= (pos.y-enemy.y) && (pos.y-enemy.y) == (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+          }
+          if(pos.x == enemy.x){
+            if(pos.y > enemy.y){
+              if(moves[4] >= (pos.y-enemy.y)){
+                return 1;
+              }
+            }
+            if(pos.y < enemy.y){
+              if(moves[0] >= (enemy.y-pos.y)){
+                return 1;
+              }
+            }
+          }
+          if(pos.x > enemy.x){
+            if(pos.y > enemy.y){
+              if(moves[3] >= (enemy.y-pos.y) && (enemy.y-pos.y) == (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+            if(pos.y == enemy.y){
+              if(moves[2] >= (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+            if(pos.y < enemy.y){
+              if(moves[1] >= (pos.x-enemy.x) && (pos.x-enemy.x) == (enemy.y-pos.y)){
+                return 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return 0;
 }
