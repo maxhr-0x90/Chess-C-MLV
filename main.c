@@ -21,7 +21,7 @@ int(main)(){
       moves[i] = 0;
     }
     moves_possible(board, pos, moves);
-    if(est_mortel(board, pos)){
+    if(est_mortel(board, pos, board[pos.y][pos.x]->couleur)){
       printf("est mortel\n");
     }
     else{

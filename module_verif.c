@@ -192,7 +192,7 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
-int est_mortel(Piece *board[][8], Coord pos){
+int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
   int i, j, x, moves[8];
   Coord enemy;
 
@@ -217,6 +217,16 @@ int est_mortel(Piece *board[][8], Coord pos){
         for(x = 0; x < 8; x++){
           if(pos.x < enemy.x){
             if(pos.y < enemy.y){
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[7] == -1){
+                if(enemy.y == pos.y+2 && enemy.x == pos.x+1){
+                  return 1;
+                }
+              }
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[6] == -1){
+                if(enemy.y == pos.y+1 && enemy.x == pos.x+2){
+                  return 1;
+                }
+              }
               if(moves[7] >= (enemy.y-pos.y) && (enemy.y-pos.y) == (enemy.x-pos.x)){
                 return 1;
               }
@@ -227,7 +237,54 @@ int est_mortel(Piece *board[][8], Coord pos){
               }
             }
             if(pos.y > enemy.y){
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[5] == -1){
+                if(enemy.y == pos.y-1 && enemy.x == pos.x+2){
+                  return 1;
+                }
+              }
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[4] == -1){
+                if(enemy.y == pos.y-2 && enemy.x == pos.x+1){
+                  return 1;
+                }
+              }
               if(moves[5] >= (pos.y-enemy.y) && (pos.y-enemy.y) == (enemy.x-pos.x)){
+                return 1;
+              }
+            }
+          }
+          if(pos.x > enemy.x){
+            if(pos.y > enemy.y){
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[3] == -1){
+                if(enemy.y == pos.y-2 && enemy.x == pos.x-1){
+                  return 1;
+                }
+              }
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[2] == -1){
+                if(enemy.y == pos.y-1 && enemy.x == pos.x-2){
+                  return 1;
+                }
+              }
+              if(moves[3] >= (pos.y-enemy.y) && (pos.y-enemy.y) == (pos.x-enemy.x)){
+                return 1;
+              }
+            }
+            if(pos.y == enemy.y){
+              if(moves[2] >= (pos.x-enemy.x)){
+                return 1;
+              }
+            }
+            if(pos.y < enemy.y){
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[1] == -1){
+                if(enemy.y == pos.y+1 && enemy.x == pos.x-2){
+                  return 1;
+                }
+              }
+              if(board[enemy.y][enemy.x]->rang == Cavalier && moves[0] == -1){
+                if(enemy.y == pos.y+2 && enemy.x == pos.x-1){
+                  return 1;
+                }
+              }
+              if(moves[1] >= (pos.x-enemy.x) && (pos.x-enemy.x) == (enemy.y-pos.y)){
                 return 1;
               }
             }
@@ -240,23 +297,6 @@ int est_mortel(Piece *board[][8], Coord pos){
             }
             if(pos.y < enemy.y){
               if(moves[0] >= (enemy.y-pos.y)){
-                return 1;
-              }
-            }
-          }
-          if(pos.x > enemy.x){
-            if(pos.y > enemy.y){
-              if(moves[3] >= (enemy.y-pos.y) && (enemy.y-pos.y) == (enemy.x-pos.x)){
-                return 1;
-              }
-            }
-            if(pos.y == enemy.y){
-              if(moves[2] >= (enemy.x-pos.x)){
-                return 1;
-              }
-            }
-            if(pos.y < enemy.y){
-              if(moves[1] >= (pos.x-enemy.x) && (pos.x-enemy.x) == (enemy.y-pos.y)){
                 return 1;
               }
             }
