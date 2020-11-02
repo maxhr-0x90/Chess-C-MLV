@@ -21,12 +21,15 @@ int(main)(){
       moves[i] = 0;
     }
     moves_possible(board, pos, moves);
+    /*
     if(est_mortel(board, pos, board[pos.y][pos.x]->couleur)){
       printf("est mortel\n");
     }
     else{
       printf("est pas mortel\n");
     }
+    */
+    est_echec(board, board[pos.y][pos.x]->couleur);
     actualise_plateau(board, pos, moves);
 
     target = clic();

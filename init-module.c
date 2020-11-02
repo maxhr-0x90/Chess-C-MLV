@@ -1,7 +1,6 @@
 #include "assets.h"
 
 void init_plateau(Piece *board[][8], Piece pieces[32]){
-	int i;
 	vider_plateau(board);
 	placer_pieces(board, pieces);
 	init_pieces(board);

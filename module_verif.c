@@ -31,7 +31,7 @@ int depasse_piece(Piece *board[][8], Coord pos, Coord target, Coord deplace){
   return 0;
 }
 
-void formeL_posssible(Piece *board[][8], Coord pos, int *moves){
+void formeL_possible(Piece *board[][8], Coord pos, int *moves){
   int i, swp;
   Coord dec;
   Coord tmp;
@@ -65,7 +65,7 @@ void formeL_posssible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
-void droit_posssible(Piece *board[][8], Coord pos, int *moves){
+void droit_possible(Piece *board[][8], Coord pos, int *moves){
   int i, j, valide, swp;
   Coord dec;
   Coord tmp;
@@ -95,7 +95,7 @@ void droit_posssible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
-void diagonal_posssible(Piece *board[][8], Coord pos, int *moves){
+void diagonal_possible(Piece *board[][8], Coord pos, int *moves){
   int i, j, valide, swp;
   Coord dec;
   Coord tmp;
@@ -125,7 +125,7 @@ void diagonal_posssible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
-void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves){
+void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
   int i;
   Coord tmp;
 
@@ -176,19 +176,19 @@ void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves){
 
 void moves_possible(Piece *board[][8], Coord pos, int *moves){
   if(board[pos.y][pos.x]->move.formeL.val){
-    formeL_posssible(board, pos, moves);
+    formeL_possible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.droit.val){
-    droit_posssible(board, pos, moves);
+    droit_possible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.diagonal.val){
-    diagonal_posssible(board, pos, moves);
+    diagonal_possible(board, pos, moves);
   }
 
   if(board[pos.y][pos.x]->move.ajustement[1] == 'p'){
-    ajustement_p_posssible(board, pos, moves);
+    ajustement_p_possible(board, pos, moves);
   }
 }
 
@@ -196,13 +196,10 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
   int i, j, x, moves[8];
   Coord enemy;
 
-  printf("%d %d\n", pos.x, pos.y);
-
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
-      if(board[i][j] != NULL && board[pos.y][pos.x]->couleur !=board[i][j]->couleur){
+      if(board[i][j] != NULL && color !=board[i][j]->couleur){
 
-        printf("%d, %d\n", i, j);
         enemy.x = j;
         enemy.y = i;
 
@@ -210,10 +207,6 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
           moves[x] = 0;
         }
         moves_possible(board, enemy, moves);
-        for(x = 0; x < 8; x++){
-          printf("%d ", moves[x]);
-        }
-        printf("\n");
         for(x = 0; x < 8; x++){
           if(pos.x < enemy.x){
             if(pos.y < enemy.y){
@@ -301,6 +294,24 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
               }
             }
           }
+        }
+      }
+    }
+  }
+  return 0;
+}
+
+int est_echec(Piece *board[][8], unsigned int color){
+  int i, j;
+  Coord pos;
+  for(i = 0; i < 8; i++){
+    for(j = 0; j < 8; j++){
+      if(board[i][j] != NULL && board[i][j]->rang == Roi && board[i][j]->couleur == color){
+        pos.x = j;
+        pos.y = i;
+        if(est_mortel(board, pos, color)){
+          printf("echec\n");
+          return 1;
         }
       }
     }

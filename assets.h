@@ -49,12 +49,13 @@ typedef struct
 
 int est_piece(Piece *board[][8], Coord pos);
 int est_legal(Piece *board[][8], Coord pos, Coord target);
-void formeL_posssible(Piece *board[][8], Coord pos, int *moves);
-void droit_posssible(Piece *board[][8], Coord pos, int *moves);
-void diagonal_posssible(Piece *board[][8], Coord pos, int *moves);
-void ajustement_p_posssible(Piece *board[][8], Coord pos, int *moves);
+void formeL_possible(Piece *board[][8], Coord pos, int *moves);
+void droit_possible(Piece *board[][8], Coord pos, int *moves);
+void diagonal_possible(Piece *board[][8], Coord pos, int *moves);
+void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves);
 void moves_possible(Piece *board[][8], Coord pos, int *moves);
 int est_mortel(Piece *board[][8], Coord pos, unsigned int color);
+int est_echec(Piece *board[][8], unsigned int color);
 
 /*-----------------------Module graphique--------------------------*/
 
