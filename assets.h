@@ -28,7 +28,7 @@ typedef struct
 {
 	TypePiece rang;
 	Joueur couleur;
-	Bool posInit;
+	unsigned char nbMouv;
 	Bool estVivant;
 	Deplacement move;
 } Piece;

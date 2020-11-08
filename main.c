@@ -4,7 +4,7 @@ int(main)(){
   Piece *board[8][8];
   Piece set_piece[32];
   Coord pos, target;
-  int i, moves[8];
+  int i, moves[9];
   for(i = 0; i<8; i++){
     moves[i] = 0;
   }

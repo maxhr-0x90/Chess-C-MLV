@@ -20,7 +20,7 @@ void vider_plateau(Piece *board[][8]){
 void placer_pieces(Piece *board[][8], Piece pieces[32]){
 	int i;
 	for(i = 0; i < 32; i++){
-		pieces[i].posInit.val = 1;
+		pieces[i].nbMouv = 1;
 		pieces[i].estVivant.val = 1;
 
 		if(i < 16){
