@@ -192,6 +192,23 @@ void moves_possible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
+Coord get_pos_roi(Piece *board[][8], unsigned int color){
+  int i, j;
+  Coord pos;
+  pos.x = -1;
+  pos.y = -1;
+  for(i = 0; i < 8; i++){
+    for(j = 0; j < 8; j++){
+      if(board[i][j] != NULL && board[i][j]->rang == Roi && board[i][j]->couleur == color){
+        pos.x = j;
+        pos.y = i;
+        return pos;
+      }
+    }
+  }
+  return pos;
+}
+
 int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
   int i, j, x, moves[8];
   Coord enemy;
@@ -302,19 +319,94 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
 }
 
 int est_echec(Piece *board[][8], unsigned int color){
-  int i, j;
-  Coord pos;
-  for(i = 0; i < 8; i++){
-    for(j = 0; j < 8; j++){
-      if(board[i][j] != NULL && board[i][j]->rang == Roi && board[i][j]->couleur == color){
-        pos.x = j;
-        pos.y = i;
-        if(est_mortel(board, pos, color)){
-          printf("echec\n");
-          return 1;
-        }
-      }
-    }
+  Coord pos = get_pos_roi(board, color);
+  if(est_mortel(board, pos, color)){
+    printf("echec\n");
+    return 1;
   }
   return 0;
+}
+
+void move_legal(Piece *board[][8], Coord pos, int *moves){
+  int i,j, swp, protect_spot;
+  int a_change = 0;
+  int del_start = -1;
+  Piece *swpPiece;
+  Piece *tempPiece = board[pox.y][pos.x];
+  Coord dec;
+  Coord posRoi = get_pos_roi(board, tempPiece->couleur);
+
+  if(!(est_echec(board, tempPiece->couleur))){
+    moves[9] = 0;
+    board[pox.y][pos.x] = NULL;
+
+    if(est_echec(board, tempPiece->couleur)){
+      if (pos.x == posRoi.x) {
+        del_start = 1;
+      }
+
+      if (pos.y == posRoi.y) {
+        del_start = 3;
+      }
+
+      if (pos.x - posRoi.x == pos.y - posRoi.y) {
+        del_start = 2;
+      }
+
+      if (pos.x - posRoi.x == posRoi.y - pos.y) {
+        del_start = 0;
+      }
+
+      for (i = del_start; i < del_start + 3 ; i++) {
+        moves[i] = 0;
+        moves[(i+4) % 8] = 0;
+      }
+    }
+
+    board[pox.y][pos.x] = tempPiece;
+
+  } else {
+    moves[9] = 1;
+
+    dec.x = 0;
+    dex.y = 1;
+    protect_spot = 0;
+    board[pox.y][pos.x] = NULL;
+
+    for (i = 0; i < 8; i++) {
+      for (j = 1; j <= moves[i]; j++) {
+        swpPiece = board[pox.y + dec.y * j][pos.x + dec.x * j];
+        board[pox.y + dec.y * j][pos.x + dec.x * j] = tempPiece;
+
+        if(!(est_echec(board, tempPiece->couleur))){
+          moves[i] = j;
+          a_change = 1;
+          protect_spot++;
+        }
+
+        board[pox.y + dec.y * j][pos.x + dec.x * j] = swpPiece;
+      }
+
+      if(protect_spot > 1){
+        for (j = 0; j < 8; j++) {
+          moves[j] = 0;
+        }
+        break;
+      }
+
+      if(a_change){
+        a_change = 0;
+      } else {
+        moves[i] = 0;
+      }
+
+      swp = dec.x;
+      dec.x = swp + dec.y;
+      dec.y = -swp + dec.y;
+      dec.x = dex.x/abs(dec.x);
+      dec.y = dex.y/abs(dec.y);
+    }
+
+    board[pox.y][pos.x] = tempPiece;
+  }
 }

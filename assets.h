@@ -54,8 +54,10 @@ void droit_possible(Piece *board[][8], Coord pos, int *moves);
 void diagonal_possible(Piece *board[][8], Coord pos, int *moves);
 void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves);
 void moves_possible(Piece *board[][8], Coord pos, int *moves);
+Coord get_pos_roi(Piece *board[][8], unsigned int color);
 int est_mortel(Piece *board[][8], Coord pos, unsigned int color);
 int est_echec(Piece *board[][8], unsigned int color);
+void move_legal(Piece *board[][8], Coord pos, int *moves);
 
 /*-----------------------Module graphique--------------------------*/
 
