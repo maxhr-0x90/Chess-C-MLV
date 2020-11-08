@@ -342,11 +342,11 @@ void move_legal(Piece *board[][8], Coord pos, int *moves){
 
     if(est_echec(board, tempPiece->couleur)){
       if (pos.x == posRoi.x) {
-        del_start = 1;
+        del_start = 3;
       }
 
       if (pos.y == posRoi.y) {
-        del_start = 3;
+        del_start = 1;
       }
 
       if (pos.x - posRoi.x == pos.y - posRoi.y) {
