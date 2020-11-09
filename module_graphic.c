@@ -101,3 +101,20 @@ Coord clic(){
   map.y = y/CASE;
   return map;
 }
+
+void screen_fin_partie(Joueur color){
+    MLV_Font *font;
+    MLV_create_window("fin", "fin", 400, 100);
+
+    font = MLV_load_font("ressources/polices/police_anc.ttf", 40);
+    if(color){
+      MLV_draw_text_with_font(33, 30, "Les Blancs gagnent", font, MLV_COLOR_RED2);
+    }
+    else{
+      MLV_draw_text_with_font(35, 30, "Les Noirs gagnent", font, MLV_COLOR_RED2);
+    }
+    MLV_actualise_window();
+    MLV_wait_seconds(3);
+    MLV_free_font(font);
+    MLV_free_window();
+}

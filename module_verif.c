@@ -508,7 +508,6 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
             return 0;
           }
         }
-        printf("\n");
       }
     }
   }

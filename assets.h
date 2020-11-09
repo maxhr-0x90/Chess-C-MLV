@@ -68,6 +68,7 @@ void color_piece();
 void indic_deplace(Coord pos, int *moves);
 void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
 Coord clic();
+void screen_fin_partie(Joueur color);
 
 /*--------------------Module d'initialisation----------------------*/
 
@@ -89,8 +90,8 @@ void init_deplacement(Piece pieces[32]);
 
 /*void load();*/
 /*void leaderboard();*/
-void menu();
+int menu();
 
 /*-------------------------Module de jeu----------------------------*/
 
-void jeu();
+int jeu();

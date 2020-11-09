@@ -1,13 +1,13 @@
 #include "assets.h"
 
-void menu(){
-  int clic = 0;
+int menu(){
+  int clic, choix;
   int x,y;
   MLV_Music *menu1, *menu2, *menu_intro;
   MLV_Font *font1, *font2;
   MLV_Image *image;
 
-  MLV_create_window("ok", "ok", 400, 800);
+  MLV_create_window("menu", "menu", 400, 800);
   MLV_init_audio();
 
   image = MLV_load_image("ressources/issou_corp.png");
@@ -37,6 +37,7 @@ void menu(){
   MLV_free_font(font1);
 
   MLV_play_music(menu_intro, 0.30, -1);
+  clic = 0;
   while(clic == 0){
     MLV_draw_filled_rectangle(0, 0, 800, 800, MLV_COLOR_BLACK);
     font2 = MLV_load_font("ressources/polices/police_anc.ttf", 100);
@@ -54,7 +55,7 @@ void menu(){
 
     MLV_draw_text_with_font(150, 390, "Play", font2, MLV_COLOR_RED2);
     MLV_draw_text_with_font(150, 470, "Load", font2, MLV_COLOR_RED2);
-    MLV_draw_text_with_font(120, 550, "Options", font2, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 550, "Quitter", font2, MLV_COLOR_RED2);
     MLV_draw_text_with_font(90, 630, "Leaderboard", font2, MLV_COLOR_RED2);
     MLV_get_mouse_position(&x, &y);
 
@@ -63,9 +64,8 @@ void menu(){
       font2 = MLV_load_font("ressources/polices/police_anc.ttf", 45);
       MLV_draw_text_with_font(145, 385, "Play", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
-        MLV_free_window();
-        MLV_free_music(menu_intro);
-        jeu();
+        clic = 1;
+        choix = 1;
       }
     }
 
@@ -74,23 +74,36 @@ void menu(){
       font2 = MLV_load_font("ressources/polices/police_anc.ttf", 45);
       MLV_draw_text_with_font(143, 465, "Load", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
-        printf("lol\n");;
+        clic = 1;
+        choix = 2;
       }
     }
 
-    if(x > 120 && x < 260 && y > 550 && y < 600){
+    if(x > 130 && x < 270 && y > 550 && y < 600){
       MLV_free_font(font2);
       font2 = MLV_load_font("ressources/polices/police_anc.ttf", 44);
-      MLV_draw_text_with_font(115, 545, "Options", font2, MLV_COLOR_ORANGE);
+      MLV_draw_text_with_font(125, 545, "Quitter", font2, MLV_COLOR_ORANGE);
+      if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
+        clic = 1;
+        choix = 3;
+      }
     }
 
     if(x > 90 && x < 300 && y > 630 && y < 680){
       MLV_free_font(font2);
       font2 = MLV_load_font("ressources/polices/police_anc.ttf", 43);
       MLV_draw_text_with_font(85, 625, "Leaderboard", font2, MLV_COLOR_ORANGE);
+      if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
+        clic = 1;
+        choix = 4;
+      }
     }
-
-    MLV_actualise_window();
-    MLV_free_font(font2);
+    if(clic != 1){
+      MLV_actualise_window();
+      MLV_free_font(font2);
+    }
   }
+  MLV_free_window();
+  MLV_free_music(menu_intro);
+  return choix;
 }
