@@ -473,7 +473,9 @@ int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
       }
     } else {
       if (pos.x + dec.x == target.x && pos.y + dec.y == target.y){
+        if (moves[i] != 0){
         return 1;
+        }
       }
     }
 
@@ -493,32 +495,22 @@ int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
 int est_echec_et_mat(Piece *board[][8], Joueur color){
   int i, j, k, move[9];
   Coord pos;
-  printf("ok\n");
+
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
       pos.x = j;
       pos.y = i;
       if(board[i][j] != NULL && color == board[i][j]->couleur){
-        moves_possibles(board, pos, move);
-        printf("%d, %d ->", i, j);
+
+        moves_legaux(board, pos, move);
         for(k = 0; k < 8; k++){
-          printf("%d ",  move[k]);
           if(move[k] != 0 && move[k] != -1){
             return 0;
           }
         }
-        /****/
-        pos.x = 4;
-        pos.y = 0;
-        moves_possibles(board, pos, move);
-        for(k = 0; k < 8; k++){
-          printf("%d ",  move[k]);
-        }
-        /****/
         printf("\n");
       }
     }
   }
-  printf("c'est fini\n");
   return 1;
 }
