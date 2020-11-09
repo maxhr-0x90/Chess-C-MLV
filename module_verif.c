@@ -457,12 +457,16 @@ int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
   for (i = 0; i < 8; i++) {
     if(tempPiece->rang != Cavalier){
       if(moves[8]){
-        start = moves[i];
+        if(moves[i]){
+          start = moves[i];
+        } else {
+          start = 1;
+        }
       } else{
         start = 1;
       }
       for (j = start; j <= moves[i]; j++) {
-        if (pos.x + dec.x*j == target.x && pos.y + dec.y*j == target.y){
+        if ((pos.x + dec.x*j) == target.x && (pos.y + dec.y*j) == target.y){
           return 1;
         }
       }
