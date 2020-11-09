@@ -83,3 +83,13 @@ void init_deplacement(Piece pieces[32]);
 /**/void deplace_fou(Piece *pieceptr);
 /**/void deplace_cavalier(Piece *pieceptr);
 /**/void deplace_pion(Piece *pieceptr);
+
+/*-------------------------Module du menu---------------------------*/
+
+/*void load();*/
+/*void leaderboard();*/
+void menu();
+
+/*-------------------------Module de jeu----------------------------*/
+
+void jeu();
