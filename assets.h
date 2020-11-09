@@ -47,24 +47,25 @@ typedef struct
 
 /*--------------------Module de vérification-----------------------*/
 
+int sgn(int i);
 int est_piece(Piece *board[][8], Coord pos);
-int est_legal(Piece *board[][8], Coord pos, Coord target);
 void formeL_possible(Piece *board[][8], Coord pos, int *moves);
 void droit_possible(Piece *board[][8], Coord pos, int *moves);
 void diagonal_possible(Piece *board[][8], Coord pos, int *moves);
 void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves);
-void moves_possible(Piece *board[][8], Coord pos, int *moves);
+void moves_possibles(Piece *board[][8], Coord pos, int *moves);
 Coord get_pos_roi(Piece *board[][8], unsigned int color);
 int est_mortel(Piece *board[][8], Coord pos, unsigned int color);
 int est_echec(Piece *board[][8], unsigned int color);
-void move_legal(Piece *board[][8], Coord pos, int *moves);
+void moves_legaux(Piece *board[][8], Coord pos, int *moves);
+int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
 
 /*-----------------------Module graphique--------------------------*/
 
 void make_grid();
 void color_piece();
 void indic_deplace(Coord pos, int *moves);
-void actualise_plateau(Piece *board[][8], Coord pos, int *moves);
+void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
 Coord clic();
 
 /*--------------------Module d'initialisation----------------------*/

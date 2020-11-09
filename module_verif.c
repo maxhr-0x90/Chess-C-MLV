@@ -174,7 +174,7 @@ void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
-void moves_possible(Piece *board[][8], Coord pos, int *moves){
+void moves_possibles(Piece *board[][8], Coord pos, int *moves){
   if(board[pos.y][pos.x]->move.formeL.val){
     formeL_possible(board, pos, moves);
   }
@@ -223,7 +223,7 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
         for(x = 0; x < 8; x++){
           moves[x] = 0;
         }
-        moves_possible(board, enemy, moves);
+        moves_possibles(board, enemy, moves);
         for(x = 0; x < 8; x++){
           if(pos.x < enemy.x){
             if(pos.y < enemy.y){
@@ -321,77 +321,103 @@ int est_mortel(Piece *board[][8], Coord pos, unsigned int color){
 int est_echec(Piece *board[][8], unsigned int color){
   Coord pos = get_pos_roi(board, color);
   if(est_mortel(board, pos, color)){
-    printf("echec\n");
     return 1;
   }
   return 0;
 }
 
-void move_legal(Piece *board[][8], Coord pos, int *moves){
-  int i,j, swp, protect_spot;
+int sgn(int i){
+  if (i > 0) {
+    return 1;
+  } else if (i < 0) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
+void moves_legaux(Piece *board[][8], Coord pos, int *moves){
+  int i,j, swp;
   int a_change = 0;
   int del_start = -1;
+  float angleVecCav[] = {0.8, 0.6};
   Piece *swpPiece;
-  Piece *tempPiece = board[pox.y][pos.x];
+  Piece *tempPiece = board[pos.y][pos.x];
   Coord dec;
   Coord posRoi = get_pos_roi(board, tempPiece->couleur);
 
+  moves_possibles(board, pos, moves);
+
+  moves[8] = est_echec(board, tempPiece->couleur);
+
   if(!(est_echec(board, tempPiece->couleur))){
-    moves[9] = 0;
-    board[pox.y][pos.x] = NULL;
+    board[pos.y][pos.x] = NULL;
 
     if(est_echec(board, tempPiece->couleur)){
-      if (pos.x == posRoi.x) {
-        del_start = 3;
-      }
-
-      if (pos.y == posRoi.y) {
-        del_start = 1;
-      }
-
-      if (pos.x - posRoi.x == pos.y - posRoi.y) {
-        del_start = 2;
-      }
-
-      if (pos.x - posRoi.x == posRoi.y - pos.y) {
-        del_start = 0;
-      }
-
-      for (i = del_start; i < del_start + 3 ; i++) {
-        moves[i] = 0;
-        moves[(i+4) % 8] = 0;
-      }
-    }
-
-    board[pox.y][pos.x] = tempPiece;
-
-  } else {
-    moves[9] = 1;
-
-    dec.x = 0;
-    dex.y = 1;
-    protect_spot = 0;
-    board[pox.y][pos.x] = NULL;
-
-    for (i = 0; i < 8; i++) {
-      for (j = 1; j <= moves[i]; j++) {
-        swpPiece = board[pox.y + dec.y * j][pos.x + dec.x * j];
-        board[pox.y + dec.y * j][pos.x + dec.x * j] = tempPiece;
-
-        if(!(est_echec(board, tempPiece->couleur))){
-          moves[i] = j;
-          a_change = 1;
-          protect_spot++;
+      if(tempPiece->rang != Cavalier){
+        if (pos.x == posRoi.x) {
+          del_start = 1;
         }
 
-        board[pox.y + dec.y * j][pos.x + dec.x * j] = swpPiece;
-      }
+        if (pos.y == posRoi.y) {
+          del_start = 3;
+        }
 
-      if(protect_spot > 1){
+        if (pos.x - posRoi.x == pos.y - posRoi.y) {
+          del_start = 0;
+        }
+
+        if (pos.x - posRoi.x == posRoi.y - pos.y) {
+          del_start = 2;
+        }
+
+        for (i = del_start; i < del_start + 3 ; i++) {
+          moves[i] = 0;
+          moves[(i+4) % 8] = 0;
+        }
+      } else {
         for (j = 0; j < 8; j++) {
           moves[j] = 0;
         }
-        break;
+      }
+    }
+
+    board[pos.y][pos.x] = tempPiece;
+
+  }
+
+  if(est_echec(board, tempPiece->couleur) || tempPiece->rang == Roi){
+    if(tempPiece->rang != Cavalier){
+      dec.x = 0;
+      dec.y = -1;
+    } else {
+      dec.x = 1;
+      dec.y = -2;
+    }
+    board[pos.y][pos.x] = NULL;
+
+    for (i = 0; i < 8; i++) {
+      if(tempPiece->rang != Cavalier){
+        for (j = 1; j <= moves[i]; j++) {
+          swpPiece = board[pos.y + dec.y * j][pos.x + dec.x * j];
+          board[pos.y + dec.y * j][pos.x + dec.x * j] = tempPiece;
+
+          if(!(est_echec(board, tempPiece->couleur))){
+            moves[i] = j;
+            a_change = 1;
+          }
+
+          board[pos.y + dec.y * j][pos.x + dec.x * j] = swpPiece;
+        }
+      } else {
+        swpPiece = board[pos.y + dec.y][pos.x + dec.x];
+        board[pos.y + dec.y][pos.x + dec.x] = tempPiece;
+
+        if(!(est_echec(board, tempPiece->couleur))){
+          a_change = 1;
+        }
+
+        board[pos.y + dec.y][pos.x + dec.x] = swpPiece;
       }
 
       if(a_change){
@@ -401,12 +427,60 @@ void move_legal(Piece *board[][8], Coord pos, int *moves){
       }
 
       swp = dec.x;
-      dec.x = swp + dec.y;
-      dec.y = -swp + dec.y;
-      dec.x = dex.x/abs(dec.x);
-      dec.y = dex.y/abs(dec.y);
+      if(tempPiece->rang != Cavalier){
+        dec.x = sgn(swp - dec.y);
+        dec.y = sgn(swp + dec.y);
+      } else {
+        dec.x = (int)(swp*angleVecCav[i % 2] - dec.y*angleVecCav[(i + 1) % 2]);
+        dec.y = (int)(swp*angleVecCav[(i + 1) % 2] + dec.y*angleVecCav[i % 2]);
+      }
     }
 
-    board[pox.y][pos.x] = tempPiece;
+    board[pos.y][pos.x] = tempPiece;
   }
+}
+
+int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
+  int i, j, start, swp;
+  float angleVecCav[] = {0.8, 0.6};
+  Piece *tempPiece = board[pos.y][pos.x];
+  Coord dec;
+
+  if(tempPiece->rang != Cavalier){
+    dec.x = 0;
+    dec.y = -1;
+  } else {
+    dec.x = 1;
+    dec.y = -2;
+  }
+
+  for (i = 0; i < 8; i++) {
+    if(tempPiece->rang != Cavalier){
+      if(moves[8]){
+        start = moves[i];
+      } else{
+        start = 1;
+      }
+      for (j = start; j <= moves[i]; j++) {
+        if (pos.x + dec.x*j == target.x && pos.y + dec.y*j == target.y){
+          return 1;
+        }
+      }
+    } else {
+      if (pos.x + dec.x == target.x && pos.y + dec.y == target.y){
+        return 1;
+      }
+    }
+
+    swp = dec.x;
+    if(tempPiece->rang != Cavalier){
+      dec.x = sgn(swp - dec.y);
+      dec.y = sgn(swp + dec.y);
+    } else {
+      dec.x = (int)(swp*angleVecCav[i % 2] - dec.y*angleVecCav[(i + 1) % 2]);
+      dec.y = (int)(swp*angleVecCav[(i + 1) % 2] + dec.y*angleVecCav[i % 2]);
+    }
+  }
+
+  return 0;
 }

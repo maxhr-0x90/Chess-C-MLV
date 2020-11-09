@@ -11,16 +11,23 @@ int(main)(){
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*8);
   init_plateau(board, set_piece);
-  actualise_plateau(board, pos, moves);
+  actualise_plateau(board, pos, moves, 0);
   while(1){
     pos = clic();
-    while(!(est_piece(board, pos)))
-      pos = clic();
+    if(est_piece(board, pos)){
+      for(i = 0; i<9; i++){
+        moves[i] = 0;
+      }
+      moves_legaux(board, pos, moves);
+      actualise_plateau(board, pos, moves, 1);
 
-    for(i = 0; i<8; i++){
-      moves[i] = 0;
+      target = clic();
+      if(est_legal(board, pos, target, moves)){
+        board[target.y][target.x] = board[pos.y][pos.x];
+        board[pos.y][pos.x] = NULL;
+      }
+      actualise_plateau(board, pos, moves, 0);
     }
-    moves_possible(board, pos, moves);
     /*
     if(est_mortel(board, pos, board[pos.y][pos.x]->couleur)){
       printf("est mortel\n");
@@ -29,16 +36,6 @@ int(main)(){
       printf("est pas mortel\n");
     }
     */
-    est_echec(board, board[pos.y][pos.x]->couleur);
-    actualise_plateau(board, pos, moves);
-
-    target = clic();
-      while(est_piece(board, target) && board[target.y][target.x]->couleur == board[pos.y][pos.x]->couleur){
-        target = clic();
-      }
-    board[target.y][target.x] = board[pos.y][pos.x];
-    board[pos.y][pos.x] = NULL;
-    actualise_plateau(board, pos, moves);
   }
 
   MLV_wait_seconds(100);
