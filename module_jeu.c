@@ -1,6 +1,7 @@
 #include "assets.h"
 
 void jeu(){
+  int jeu = 1;
   Piece *board[8][8];
   Piece set_piece[32];
   Coord pos, target;
@@ -8,10 +9,8 @@ void jeu(){
   MLV_create_window("jeu", "jeu", CASE*8, CASE*8);
   init_plateau(board, set_piece);
   actualise_plateau(board, pos, moves, 0);
-  for(i = 0; i<8; i++){
-    moves[i] = 0;
-  }
-  while(1){
+
+  while(jeu == 1){
     pos = clic();
     if(est_piece(board, pos)){
       for(i = 0; i<9; i++){
@@ -27,5 +26,10 @@ void jeu(){
       }
       actualise_plateau(board, pos, moves, 0);
     }
+    if(est_echec_et_mat(board, Noir)){
+      printf("c'est tout bon\n");
+      jeu = 0;
+    }
   }
+  exit(0);
 }

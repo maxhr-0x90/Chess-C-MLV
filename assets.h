@@ -55,10 +55,11 @@ void diagonal_possible(Piece *board[][8], Coord pos, int *moves);
 void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves);
 void moves_possibles(Piece *board[][8], Coord pos, int *moves);
 Coord get_pos_roi(Piece *board[][8], unsigned int color);
-int est_mortel(Piece *board[][8], Coord pos, unsigned int color);
+int est_mortel(Piece *board[][8], Coord pos, Joueur color);
 int est_echec(Piece *board[][8], unsigned int color);
 void moves_legaux(Piece *board[][8], Coord pos, int *moves);
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
+int est_echec_et_mat(Piece *board[][8], Joueur color);
 
 /*-----------------------Module graphique--------------------------*/
 
