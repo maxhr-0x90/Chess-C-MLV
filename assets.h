@@ -3,7 +3,7 @@
 #include <MLV/MLV_all.h>
 #include <string.h>
 
-#define CASE 96
+#define CASE 98
 
 /*-------------------Définitions de types------------------------*/
 
@@ -88,10 +88,14 @@ void init_deplacement(Piece pieces[32]);
 
 /*-------------------------Module du menu---------------------------*/
 
-/*void load();*/
 /*void leaderboard();*/
 int menu();
 
 /*-------------------------Module de jeu----------------------------*/
 
 int jeu();
+
+/*---------------------Module de sauvegarde-------------------------*/
+
+void save(Piece *board[][8]);
+void load(Piece *board[][8], Piece pieces[32]);

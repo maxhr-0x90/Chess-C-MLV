@@ -12,7 +12,8 @@ int jeu(){
   move_sound = MLV_load_sound("ressources/OST/move.wav");
 
   jeu.jActuel = Blanc;
-  init_plateau(jeu.echiquier, set_piece);
+  /*init_plateau(jeu.echiquier, set_piece);*/
+  load(jeu.echiquier, set_piece);
   actualise_plateau(jeu.echiquier, pos, moves, 0);
 
   loop = 1;
