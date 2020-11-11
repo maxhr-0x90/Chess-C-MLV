@@ -103,6 +103,7 @@ int menu(){
       MLV_free_font(font2);
     }
   }
+  MLV_free_audio();
   MLV_free_window();
   MLV_free_music(menu_intro);
   return choix;

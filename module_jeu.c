@@ -5,10 +5,13 @@ int jeu(){
   Coord pos, target;
   int i, loop, moves[9];
   Config jeu;
+  MLV_Sound* move_sound;
+
   MLV_create_window("jeu", "jeu", CASE*8, CASE*8);
+  MLV_init_audio();
+  move_sound = MLV_load_sound("ressources/OST/move.wav");
 
   jeu.jActuel = Blanc;
-
   init_plateau(jeu.echiquier, set_piece);
   actualise_plateau(jeu.echiquier, pos, moves, 0);
 
@@ -27,6 +30,7 @@ int jeu(){
         jeu.echiquier[target.y][target.x] = jeu.echiquier[pos.y][pos.x];
         jeu.echiquier[pos.y][pos.x] = NULL;
         jeu.jActuel = (jeu.jActuel+1)%2;
+        MLV_play_sound(move_sound, 0.2);
       }
       actualise_plateau(jeu.echiquier, pos, moves, 0);
     }
@@ -35,6 +39,9 @@ int jeu(){
       loop = 0;
     }
   }
+  MLV_play_sound(move_sound, 0.5);
+  MLV_free_audio();
   MLV_free_window();
+
   return jeu.jActuel;
 }
