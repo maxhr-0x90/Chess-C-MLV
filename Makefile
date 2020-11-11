@@ -25,4 +25,4 @@ module_jeu.o : module_jeu.c
 	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) module_jeu.c
 
 clean :
-	rm -rf *.o
+	rm -rf *.o main
