@@ -1,6 +1,6 @@
 #include "assets.h"
 
-void save(Piece *board[][8]){
+void save(Piece *board[][8], Joueur jActuel){
   int i, j, x;
   FILE* save = NULL;
   save = fopen("save", "w");
@@ -13,7 +13,7 @@ void save(Piece *board[][8]){
       }
     }
   }
-
+  fputc(jActuel, save);
   fputc(x, save);
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
@@ -38,10 +38,12 @@ void save(Piece *board[][8]){
   fclose(save);
 }
 
-void load(Piece *board[][8], Piece pieces[32]){
+Joueur load(Piece *board[][8], Piece pieces[32]){
   int i, j, x, y;
+  Joueur jActuel;
   FILE* save = NULL;
   save = fopen("save", "r+");
+  jActuel = fgetc(save);
   i = 0;
   j = fgetc(save);
 
@@ -50,19 +52,12 @@ void load(Piece *board[][8], Piece pieces[32]){
 
     x = fgetc(save);
     y = fgetc(save);
-    printf("%d%d nouvelle piece %d\n",x, y, i);
     pieces[i].rang = fgetc(save);
-    printf("%d\n", pieces[i].rang);
     pieces[i].couleur = fgetc(save);
-    printf("%d\n", pieces[i].couleur);
     pieces[i].nbMouv = fgetc(save);
-    printf("%d\n", pieces[i].nbMouv);
     pieces[i].estVivant.val = fgetc(save);
-    printf("%d\n", pieces[i].estVivant.val);
     pieces[i].move.droit.val = fgetc(save);
-    printf("%d\n", pieces[i].move.droit.val);
     pieces[i].move.diagonal.val = fgetc(save);
-    printf("%d\n", pieces[i].move.diagonal.val);
     pieces[i].move.formeL.val = fgetc(save);
     pieces[i].move.limitation = fgetc(save);
     pieces[i].move.ajustement[0] = fgetc(save);
@@ -72,4 +67,5 @@ void load(Piece *board[][8], Piece pieces[32]){
   }
 
   fclose(save);
+  return jActuel;
 }

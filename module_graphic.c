@@ -6,8 +6,8 @@
 void make_grid(){
   int x, y;
   MLV_draw_filled_rectangle(0, 0, 8*CASE, 8*CASE, MLV_COLOR_BLACK);
-  for(y = 0; y < 8; y++)
-    for(x = 0; x < 8; x++){
+  for(y = 0; y < 4; y++)
+    for(x = 0; x < 4; x++){
       MLV_draw_filled_rectangle(x*CASE*2, y*CASE*2, CASE, CASE, MLV_COLOR_WHITE);
       MLV_draw_filled_rectangle(CASE+x*CASE*2, CASE+y*CASE*2, CASE, CASE, MLV_COLOR_WHITE);
     }
@@ -32,6 +32,7 @@ void color_piece(Piece *board[][8]){
 				strcat(path, ext);
 				image = MLV_load_image(path);
 
+        MLV_resize_image(image, CASE, CASE);
         MLV_draw_image(image, CASE*j, CASE*i);
 				path[0] = '\0';
 			}
@@ -92,13 +93,25 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
 
 /*GESTION DU CLIC*/
 
-Coord clic(){
+Coord clic_or_save(Piece *board[][8], Joueur jActuel){
   Coord map;
   int x, y;
-  MLV_wait_mouse(&x, &y);
+  int touche;
+  x = -1;
+  y = -1;
+  map.x = x;
+  map.y = y;
+  touche = ' ';
+  while(en_dehors(map) && touche != 's'){
+    MLV_wait_keyboard_or_mouse( NULL, NULL, &touche, &x, &y);
 
-  map.x = x/CASE;
-  map.y = y/CASE;
+    map.x = x/CASE;
+    map.y = y/CASE;
+  }
+  if(touche == 's'){
+    save(board, jActuel);
+    exit(0);
+  }
   return map;
 }
 
@@ -117,4 +130,11 @@ void screen_fin_partie(Joueur color){
     MLV_wait_seconds(3);
     MLV_free_font(font);
     MLV_free_window();
+}
+
+void affichage_save(){
+  MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 40);
+  MLV_draw_text_with_font(CASE/4, CASE*8+CASE/5, "Press S to Save&Quit", font, MLV_COLOR_RED);
+  MLV_actualise_window();
+  MLV_free_font(font);
 }
