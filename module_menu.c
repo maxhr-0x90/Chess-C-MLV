@@ -22,7 +22,7 @@ int menu(){
   MLV_draw_text_with_font(70, 300, "Soam LE DORTZ", font1, MLV_COLOR_RED2);
   MLV_draw_text_with_font(70, 350, "Enzo CADONI", font1, MLV_COLOR_RED2);
   MLV_actualise_window();
-  MLV_play_music(menu1, 0.2, 1);
+  MLV_play_music(menu1, 0.6, 1);
   MLV_wait_mouse_or_seconds(NULL, NULL, 4);
   MLV_free_music(menu1);
 
@@ -31,12 +31,12 @@ int menu(){
   MLV_draw_image(image, 0, 100);
   MLV_draw_text_with_font(90, 500, "Issou Corp", font1, MLV_COLOR_RED2);
   MLV_actualise_window();
-  MLV_play_music(menu2, 0.2, 1);
+  MLV_play_music(menu2, 0.6, 1);
   MLV_wait_mouse_or_seconds(NULL, NULL, 4);
   MLV_free_music(menu2);
   MLV_free_font(font1);
 
-  MLV_play_music(menu_intro, 0.30, -1);
+  MLV_play_music(menu_intro, 0.6, -1);
   clic = 0;
   while(clic == 0){
     MLV_draw_filled_rectangle(0, 0, 800, 800, MLV_COLOR_BLACK);
@@ -104,7 +104,7 @@ int menu(){
     }
   }
   MLV_free_audio();
-  MLV_free_window();
   MLV_free_music(menu_intro);
+  MLV_free_window();
   return choix;
 }

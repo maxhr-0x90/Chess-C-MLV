@@ -133,8 +133,29 @@ void screen_fin_partie(Joueur color){
 }
 
 void affichage_save(){
-  MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 40);
+  MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", CASE/2);
   MLV_draw_text_with_font(CASE/4, CASE*8+CASE/5, "Press S to Save&Quit", font, MLV_COLOR_RED);
   MLV_actualise_window();
   MLV_free_font(font);
+}
+
+void aff_leaderboard(){
+  MLV_Font* font;
+  JLeaderboard Lead[10];
+  char score[50];
+  int i = 0;
+  lecture_leaderboard(Lead);
+  MLV_create_window("Leaderboard", "Leaderboard", 4*CASE, 8*CASE);
+
+  font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 30);
+  while(Lead[i].score != -1 && i != 10){
+    MLV_draw_text_with_font(10, 20+50*i, Lead[i].pseudo, font, MLV_COLOR_RED);
+    sprintf(score, "%d", Lead[i].score);
+    MLV_draw_text_with_font(200, 20+50*i, score, font, MLV_COLOR_RED);
+    i++;
+  }
+  MLV_actualise_window();
+  MLV_free_font(font);
+  MLV_wait_mouse(NULL, NULL);
+  MLV_free_window();
 }

@@ -1,6 +1,6 @@
 #include "assets.h"
 
-int jeu(int choix){
+int jeu(int choix, int *scores){
   Piece set_piece[32];
   Coord pos, target;
   int i, mat, moves[9];
@@ -42,6 +42,15 @@ int jeu(int choix){
       actualise_plateau(jeu.echiquier, pos, moves, 0);
     }
     mat = est_echec_et_mat(jeu.echiquier, jeu.jActuel);
+  }
+
+  if(!jeu.jActuel){
+    scores[1] = score(jeu.echiquier, Noir)+200;
+    scores[0] = score(jeu.echiquier, Blanc);
+  }
+  else{
+    scores[1] = score(jeu.echiquier, Noir)+200;
+    scores[0] = score(jeu.echiquier, Blanc);
   }
   MLV_play_sound(move_sound, 0.5);
   MLV_free_sound(move_sound);

@@ -45,6 +45,12 @@ typedef struct
 	int y;
 } Coord;
 
+typedef struct
+{
+	int score;
+	char pseudo[50];
+} JLeaderboard;
+
 /*--------------------Module de vérification-----------------------*/
 
 int sgn(int i);
@@ -71,6 +77,7 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
 Coord clic_or_save(Piece *board[][8], Joueur jActuel);
 void screen_fin_partie(Joueur color);
 void affichage_save();
+void aff_leaderboard();
 
 /*--------------------Module d'initialisation----------------------*/
 
@@ -95,9 +102,13 @@ int menu();
 
 /*-------------------------Module de jeu----------------------------*/
 
-int jeu(int choix);
+int jeu(int choix, int *scores);
 
 /*---------------------Module de sauvegarde-------------------------*/
 
 void save(Piece *board[][8], Joueur jActuel);
 Joueur load(Piece *board[][8], Piece pieces[32]);
+void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2);
+int score(Piece *board[][8], Joueur color);
+void lecture_leaderboard(JLeaderboard Leaderboard[10]);
+void tri_leaderboard(int scores[2]);
