@@ -71,22 +71,26 @@ Joueur load(Piece *board[][8], Piece pieces[32]){
 }
 
 void lecture_fic_lead(char *str){
-  int i;
   char c;
-  FILE *lb = NULL;
-  lb = fopen("leaderboard", "r");
-  c = ' ';
+  int i = 0;
+  FILE* lb = NULL;
 
-  i = 0;
-  c = fgetc(lb);
-  while(c != EOF){
-    str[i] = c;
-    c = fgetc(lb);
-    i++;
+  lb = fopen("leaderboard", "r+");
+
+  if (lb == NULL){
+    printf("Impossible, rien à analyser\n");
+    exit(-1);
   }
-  rewind(lb);
+
+  do {
+    c = fgetc(lb);
+    str[i] = c;
+    i++;
+  } while(c != EOF);
+  str[i] = '\0';
   fclose(lb);
 }
+
 
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
   char* text1;
@@ -114,8 +118,8 @@ void lecture_leaderboard(JLeaderboard Leaderboard[10]){
   i = 0;
   k = 0;
   champ = 0;
-  while(lead[k] != EOF){
-    if(champ == 0 && lead[k] != EOF){
+  while(lead[k+1] != '\0'){
+    if(champ == 0){
       j = 0;
       while(lead[k] != '|' && lead[k] != EOF){
         dump[j] = lead[k];
@@ -127,14 +131,16 @@ void lecture_leaderboard(JLeaderboard Leaderboard[10]){
       k++;
       dump[0] = '\0';
     }
-    if(champ == 1 && lead[k] != EOF){
+    if(champ == 1 && lead[k+3] != '\0'){
       j = 0;
       do{
         Leaderboard[i].pseudo[j] = lead[k];
         j++;
         k++;
         champ = 0;
-      }while(lead[k] != '|' && lead[k] != EOF && lead[k] != '\n');
+      }while(lead[k] != '|' && lead[k+1] != '\0' && lead[k] != '\n');
+      k++;
+
     }
     i++;
   }
@@ -188,14 +194,16 @@ void tri_leaderboard(int scores[2]){
   i = 0;
 
   remove("leaderboard");
-  lb = fopen("leaderboard", "r+");
-  while(Lead[i+1].score != -1 && i != 10){
+  lb = fopen("leaderboard", "a+");
+  if (lb == NULL){
+    printf("Impossible, rien à analyser\n");
+    exit(-1);
+  }
+  while(Lead[i].score != -1 && i != 10){
     fprintf(lb, "%d|", Lead[i].score);
     fprintf(lb, "%s|", Lead[i].pseudo);
     i++;
   }
-  fprintf(lb, "%d|", Lead[i].score);
-  fprintf(lb, "%s", Lead[i].pseudo);
   fclose(lb);
 }
 

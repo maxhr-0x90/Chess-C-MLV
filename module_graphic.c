@@ -148,12 +148,12 @@ void aff_leaderboard(){
   MLV_create_window("Leaderboard", "Leaderboard", 4*CASE, 8*CASE);
 
   font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 30);
-  while(Lead[i].score != -1 && i != 10){
+  do{
     MLV_draw_text_with_font(10, 20+50*i, Lead[i].pseudo, font, MLV_COLOR_RED);
     sprintf(score, "%d", Lead[i].score);
     MLV_draw_text_with_font(200, 20+50*i, score, font, MLV_COLOR_RED);
     i++;
-  }
+  }while(Lead[i].score != -1 && i != 10);
   MLV_actualise_window();
   MLV_free_font(font);
   MLV_wait_mouse(NULL, NULL);

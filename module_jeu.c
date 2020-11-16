@@ -45,12 +45,12 @@ int jeu(int choix, int *scores){
   }
 
   if(!jeu.jActuel){
-    scores[1] = score(jeu.echiquier, Noir)+200;
     scores[0] = score(jeu.echiquier, Blanc);
+    scores[1] = score(jeu.echiquier, Noir)+200;
   }
   else{
-    scores[1] = score(jeu.echiquier, Noir)+200;
-    scores[0] = score(jeu.echiquier, Blanc);
+    scores[0] = score(jeu.echiquier, Blanc)+200;
+    scores[1] = score(jeu.echiquier, Noir);
   }
   MLV_play_sound(move_sound, 0.5);
   MLV_free_sound(move_sound);
