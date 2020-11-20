@@ -10,7 +10,7 @@ int jeu(int choix, int *scores){
   MLV_create_window("jeu", "jeu", CASE*8, CASE*9);
   MLV_init_audio();
   move_sound = MLV_load_sound("ressources/OST/move.wav");
-  mat = 0;
+  mat = FALSE;
 
   if(choix == 1){
     init_plateau(jeu.echiquier, set_piece);
@@ -19,27 +19,28 @@ int jeu(int choix, int *scores){
   if(choix == 2){
     jeu.jActuel = load(jeu.echiquier, set_piece);
   }
-  actualise_plateau(jeu.echiquier, pos, moves, 0);
+  actualise_plateau(jeu.echiquier, pos, moves, FALSE);
   affichage_save();
   while(!mat){
     pos = clic_or_save(jeu.echiquier, jeu.jActuel);
 
     if(est_piece(jeu.echiquier, pos) && jeu.echiquier[pos.y][pos.x]->couleur == jeu.jActuel){
-      for(i = 0; i<9; i++){
+      for(i = 0; i < 9; i++){
         moves[i] = 0;
       }
       moves_legaux(jeu.echiquier, pos, moves);
-      actualise_plateau(jeu.echiquier, pos, moves, 1);
+      actualise_plateau(jeu.echiquier, pos, moves, TRUE);
 
       target = clic_or_save(jeu.echiquier, jeu.jActuel);
 
       if(est_legal(jeu.echiquier, pos, target, moves)){
         jeu.echiquier[target.y][target.x] = jeu.echiquier[pos.y][pos.x];
         jeu.echiquier[pos.y][pos.x] = NULL;
+        maj_board(jeu.echiquier, pos, target);
         jeu.jActuel = (jeu.jActuel+1)%2;
         MLV_play_sound(move_sound, 0.2);
       }
-      actualise_plateau(jeu.echiquier, pos, moves, 0);
+      actualise_plateau(jeu.echiquier, pos, moves, FALSE);
     }
     mat = est_echec_et_mat(jeu.echiquier, jeu.jActuel);
   }

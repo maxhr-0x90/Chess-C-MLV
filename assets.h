@@ -5,6 +5,9 @@
 
 #define CASE 80
 
+#define TRUE 1
+#define FALSE 0
+
 /*-------------------Définitions de types------------------------*/
 
 typedef enum{Blanc, Noir} Joueur;
@@ -51,14 +54,19 @@ typedef struct
 	char pseudo[50];
 } JLeaderboard;
 
+/*----------------------Module mathématique------------------------*/
+int sgn(int i);
+Coord rotation(Coord vect, float mat_rot[]);
+Coord rot_mode(Coord vect, char mode);
+
 /*--------------------Module de vérification-----------------------*/
 
-int sgn(int i);
 int est_piece(Piece *board[][8], Coord pos);
 void formeL_possible(Piece *board[][8], Coord pos, int *moves);
 void droit_possible(Piece *board[][8], Coord pos, int *moves);
 void diagonal_possible(Piece *board[][8], Coord pos, int *moves);
 void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves);
+void ajustement_r_possible(Piece *board[][8], Coord pos, int *moves);
 int en_dehors(Coord pos);
 void moves_possibles(Piece *board[][8], Coord pos, int *moves);
 Coord get_pos_roi(Piece *board[][8], unsigned int color);
@@ -67,12 +75,13 @@ int est_echec(Piece *board[][8], unsigned int color);
 void moves_legaux(Piece *board[][8], Coord pos, int *moves);
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
 int est_echec_et_mat(Piece *board[][8], Joueur color);
+void maj_board(Piece *board[][8], Coord old, Coord new);
 
 /*-----------------------Module graphique--------------------------*/
 
 void make_grid();
 void color_piece();
-void indic_deplace(Coord pos, int *moves);
+void indic_deplace(Piece *board[][8], Coord pos, int *moves);
 void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
 Coord clic_or_save(Piece *board[][8], Joueur jActuel);
 void screen_fin_partie(Joueur color);

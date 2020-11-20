@@ -20,8 +20,8 @@ void vider_plateau(Piece *board[][8]){
 void placer_pieces(Piece *board[][8], Piece pieces[32]){
 	int i;
 	for(i = 0; i < 32; i++){
-		pieces[i].nbMouv = 1;
-		pieces[i].estVivant.val = 1;
+		pieces[i].nbMouv = 0;
+		pieces[i].estVivant.val = TRUE;
 
 		if(i < 16){
 			pieces[i].couleur = Noir;
@@ -63,49 +63,54 @@ void init_deplacement(Piece pieces[32]){
 }
 
 void deplace_roi(Piece *pieceptr){
-	pieceptr->move.droit.val = 1;
-	pieceptr->move.diagonal.val = 1;
-	pieceptr->move.formeL.val = 0;
+	pieceptr->move.droit.val = TRUE;
+	pieceptr->move.diagonal.val = TRUE;
+	pieceptr->move.formeL.val = FALSE;
 	pieceptr->move.limitation = 1;
 	pieceptr->move.ajustement[0] = 0;
+	pieceptr->move.ajustement[1] = 'r';
 }
 
 void deplace_reine(Piece *pieceptr){
-	pieceptr->move.droit.val = 1;
-	pieceptr->move.diagonal.val = 1;
-	pieceptr->move.formeL.val = 0;
+	pieceptr->move.droit.val = TRUE;
+	pieceptr->move.diagonal.val = TRUE;
+	pieceptr->move.formeL.val = FALSE;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
+	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_tour(Piece *pieceptr){
-	pieceptr->move.droit.val = 1;
-	pieceptr->move.diagonal.val = 0;
-	pieceptr->move.formeL.val = 0;
+	pieceptr->move.droit.val = TRUE;
+	pieceptr->move.diagonal.val = FALSE;
+	pieceptr->move.formeL.val = FALSE;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
+	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_fou(Piece *pieceptr){
-	pieceptr->move.droit.val = 0;
-	pieceptr->move.diagonal.val = 1;
-	pieceptr->move.formeL.val = 0;
+	pieceptr->move.droit.val = FALSE;
+	pieceptr->move.diagonal.val = TRUE;
+	pieceptr->move.formeL.val = FALSE;
 	pieceptr->move.limitation = 8;
 	pieceptr->move.ajustement[0] = 0;
+	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_cavalier(Piece *pieceptr){
-	pieceptr->move.droit.val = 0;
-	pieceptr->move.diagonal.val = 0;
-	pieceptr->move.formeL.val = 1;
+	pieceptr->move.droit.val = FALSE;
+	pieceptr->move.diagonal.val = FALSE;
+	pieceptr->move.formeL.val = TRUE;
 	pieceptr->move.limitation = 0;
 	pieceptr->move.ajustement[0] = 0;
+	pieceptr->move.ajustement[1] = '\0';
 }
 
 void deplace_pion(Piece *pieceptr){
-	pieceptr->move.droit.val = 0;
-	pieceptr->move.diagonal.val = 0;
-	pieceptr->move.formeL.val = 0;
+	pieceptr->move.droit.val = FALSE;
+	pieceptr->move.diagonal.val = FALSE;
+	pieceptr->move.formeL.val = FALSE;
 	pieceptr->move.limitation = 0;
 	pieceptr->move.ajustement[0] = 2;
 	pieceptr->move.ajustement[1] = 'p';

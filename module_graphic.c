@@ -41,42 +41,45 @@ void color_piece(Piece *board[][8]){
   MLV_actualise_window();
 }
 
-void indic_deplace(Coord pos, int *moves){
-  int i, j, swp;
-  Coord dec = {0, -1};
+void indic_deplace(Piece *board[][8], Coord pos, int *moves){
+  int i, j;
+  char alterne_angle[] = {'c', 'C'};
+  Coord dec;
+  Piece *tempPiece = board[pos.y][pos.x];
+
+  if(tempPiece->rang != Cavalier){
+    dec.x = 0;
+    dec.y = -1;
+  } else {
+    dec.x = 1;
+    dec.y = -2;
+  }
+
   for (i = 0; i < 8; i++) {
-    if(!moves[8]){
-      for (j = 1; j <= moves[i]; j++) {
-        MLV_draw_filled_circle(CASE*(dec.x*j + pos.x)+CASE/2, CASE*(dec.y*j + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+    if(tempPiece->rang != Cavalier){
+      if(!moves[8]){
+        for (j = 1; j <= moves[i]; j++) {
+          MLV_draw_filled_circle(CASE*(dec.x*j + pos.x)+CASE/2, CASE*(dec.y*j + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+        }
+      } else if (moves[8] && moves[i] != -1 && moves[i] != 0){
+        MLV_draw_filled_circle(CASE*(dec.x*moves[i] + pos.x)+CASE/2, CASE*(dec.y*moves[i] + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
       }
-    } else if (moves[8] && moves[i] != -1 && moves[i] != 0){
-      MLV_draw_filled_circle(CASE*(dec.x*moves[i] + pos.x)+CASE/2, CASE*(dec.y*moves[i] + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
-    }
-    swp = dec.x;
-    dec.x = sgn(swp - dec.y);
-    dec.y = sgn(swp + dec.y);
-  }
 
-  dec.x = 1;
-  dec.y = -2;
-  for (i = 0; i < 8; i+=2) {
-    if (moves[i] == -1) {
-      MLV_draw_filled_circle(CASE*(dec.x + pos.x)+CASE/2, CASE*(dec.y + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
-    }
-    swp = dec.x;
-    dec.x = -dec.y;
-    dec.y = swp;
-  }
+      if (moves[i] == -2){
+        MLV_draw_filled_circle(CASE*(dec.x*2 + pos.x)+CASE/2, CASE*(dec.y*2 + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+      }
 
-  dec.x = 2;
-  dec.y = -1;
-  for (i = 1; i < 8; i+=2) {
-    if (moves[i] == -1) {
-      MLV_draw_filled_circle(CASE*(dec.x + pos.x)+CASE/2, CASE*(dec.y + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+    } else {
+      if (moves[i] == -1) {
+        MLV_draw_filled_circle(CASE*(dec.x + pos.x)+CASE/2, CASE*(dec.y + pos.y)+CASE/2, CASE/6, MLV_rgba(63, 238, 63, 150));
+      }
     }
-    swp = dec.x;
-    dec.x = -dec.y;
-    dec.y = swp;
+
+    if(tempPiece->rang != Cavalier){
+      dec = rot_mode(dec, 45);
+    } else {
+      dec = rot_mode(dec, alterne_angle[i % 2]);
+    }
   }
 
   MLV_actualise_window();
@@ -87,7 +90,7 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
   make_grid();
   color_piece(board);
   if(trajectoires){
-    indic_deplace(pos, moves);
+    indic_deplace(board, pos, moves);
   }
 }
 
