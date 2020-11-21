@@ -195,7 +195,7 @@ void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
     /*--4--*/
     tmp.y = pos.y;
     if (!en_dehors(tmp) && est_piece(board, tmp)){
-      if (board[tmp.y][tmp.x]->couleur  == Noir) {
+      if (board[tmp.y][tmp.x]->couleur  == Blanc) {
         en_passant = board[tmp.y][tmp.x]->move.ajustement[0] / 10;
         if(en_passant){
           moves[5] = 1;
@@ -215,7 +215,7 @@ void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
     /*--4--*/
     tmp.y = pos.y;
     if (!en_dehors(tmp) && est_piece(board, tmp)){
-      if (board[tmp.y][tmp.x]->couleur  == Noir) {
+      if (board[tmp.y][tmp.x]->couleur  == Blanc) {
         en_passant = board[tmp.y][tmp.x]->move.ajustement[0] / 10;
         if(en_passant){
           moves[3] = 1;
