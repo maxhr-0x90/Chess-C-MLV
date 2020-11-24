@@ -1,5 +1,7 @@
 #include "assets.h"
 
+/*------Fonction de déroulement d'une partie'------*/
+
 int jeu(int choix, int *scores){
   Piece set_piece[32];
   Coord pos, target;
@@ -16,8 +18,8 @@ int jeu(int choix, int *scores){
     init_plateau(jeu.echiquier, set_piece);
     jeu.jActuel = Blanc;
   }
-  if(choix == 2){
-    jeu.jActuel = load(jeu.echiquier, set_piece);
+  if(1 < choix && choix < 8){
+    jeu.jActuel = load(jeu.echiquier, set_piece, choix);
   }
   actualise_plateau(jeu.echiquier, pos, moves, FALSE);
   affichage_save();
@@ -38,6 +40,7 @@ int jeu(int choix, int *scores){
         jeu.echiquier[pos.y][pos.x] = NULL;
         maj_board(jeu.echiquier, pos, target);
         jeu.jActuel = (jeu.jActuel+1)%2;
+        pion_ligne_finale(jeu.echiquier, target);
         MLV_play_sound(move_sound, 0.2);
       }
       actualise_plateau(jeu.echiquier, pos, moves, FALSE);

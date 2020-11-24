@@ -75,6 +75,7 @@ int est_echec(Piece *board[][8], unsigned int color);
 void moves_legaux(Piece *board[][8], Coord pos, int *moves);
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
 int est_echec_et_mat(Piece *board[][8], Joueur color);
+void pion_ligne_finale(Piece *board[][8], Coord xy);
 void maj_board(Piece *board[][8], Coord old, Coord new);
 
 /*-----------------------Module graphique--------------------------*/
@@ -87,6 +88,8 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel);
 void screen_fin_partie(Joueur color);
 void affichage_save();
 void aff_leaderboard();
+int save_state();
+int choix_piece_pion(Joueur color);
 
 /*--------------------Module d'initialisation----------------------*/
 
@@ -115,8 +118,8 @@ int jeu(int choix, int *scores);
 
 /*---------------------Module de sauvegarde-------------------------*/
 
-void save(Piece *board[][8], Joueur jActuel);
-Joueur load(Piece *board[][8], Piece pieces[32]);
+void save(Piece *board[][8], Joueur jActuel, int save_state);
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state);
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2);
 int score(Piece *board[][8], Joueur color);
 void lecture_leaderboard(JLeaderboard Leaderboard[10]);

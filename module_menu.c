@@ -1,5 +1,7 @@
 #include "assets.h"
 
+/*------Fonction affichant le menu------*/
+
 int menu(){
   int clic, choix;
   int x,y;
@@ -85,7 +87,7 @@ int menu(){
       MLV_draw_text_with_font(125, 545, "Quitter", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
         clic = 1;
-        choix = 3;
+        choix = 8;
       }
     }
 
@@ -95,7 +97,7 @@ int menu(){
       MLV_draw_text_with_font(85, 625, "Leaderboard", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
         clic = 1;
-        choix = 4;
+        choix = 9;
       }
     }
     if(clic != 1){

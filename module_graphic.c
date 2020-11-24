@@ -111,12 +111,38 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel){
     map.x = x/CASE;
     map.y = y/CASE;
   }
-  if(touche == 's'){
-    save(board, jActuel);
-    exit(0);
+  switch(touche){
+    case '1':
+      save(board, jActuel, 1);
+      exit(0);
+      break;
+    case '2':
+      save(board, jActuel, 2);
+      exit(0);
+      break;
+    case '3':
+      save(board, jActuel, 3);
+      exit(0);
+      break;
+    case '4':
+      save(board, jActuel, 4);
+      exit(0);
+      break;
+    case '5':
+      save(board, jActuel, 5);
+      exit(0);
+      break;
+    case '6':
+      save(board, jActuel, 6);
+      exit(0);
+      break;
+    default:
+      break;
   }
   return map;
 }
+
+/*------Fonction affichant l'écran de fin de partie------*/
 
 void screen_fin_partie(Joueur color){
     MLV_Font *font;
@@ -135,12 +161,16 @@ void screen_fin_partie(Joueur color){
     MLV_free_window();
 }
 
+/*------Fonction affichant le texte rappellant au joueur qu'il peut sauvegarder------*/
+
 void affichage_save(){
   MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", CASE/2);
-  MLV_draw_text_with_font(CASE/4, CASE*8+CASE/5, "Press S to Save&Quit", font, MLV_COLOR_RED);
+  MLV_draw_text_with_font(CASE/4, CASE*8+CASE/5, "Press 1-6 to Save&Quit", font, MLV_COLOR_RED);
   MLV_actualise_window();
   MLV_free_font(font);
 }
+
+/*------Fonction affichant le leaderboard------*/
 
 void aff_leaderboard(){
   MLV_Font* font;
@@ -161,4 +191,131 @@ void aff_leaderboard(){
   MLV_free_font(font);
   MLV_wait_mouse(NULL, NULL);
   MLV_free_window();
+}
+
+/*------Fonction permettant le choix de la save state------*/
+
+int save_state(){
+  int x, y, clic, choix;
+  MLV_Font *font1, *font2;
+
+  MLV_create_window("save_state", "save_state", 400, 800);
+  font1 = MLV_load_font("ressources/polices/police_anc.ttf", 50);
+  font2 = MLV_load_font("ressources/polices/police_anc.ttf", 55);
+
+  choix = 1;
+  clic = 0;
+  while(!clic){
+    MLV_clear_window(MLV_COLOR_BLACK);
+
+    MLV_draw_text_with_font(130, 50, "Save 1", font1, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 170, "Save 2", font1, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 290, "Save 3", font1, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 410, "Save 4", font1, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 530, "Save 5", font1, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 650, "Save 6", font1, MLV_COLOR_RED2);
+
+    MLV_get_mouse_position(&x, &y);
+
+    if(130 < x && x < 270){
+      if(60 < y && y < 140){
+        MLV_draw_text_with_font(127, 50, "Save 1", font2, MLV_COLOR_ORANGE);
+        choix = 1;
+      }
+      if(180 < y && y < 240){
+        MLV_draw_text_with_font(127, 170, "Save 2", font2, MLV_COLOR_ORANGE);
+        choix = 2;
+      }
+      if(300 < y && y < 380){
+        MLV_draw_text_with_font(127, 290, "Save 3", font2, MLV_COLOR_ORANGE);
+        choix = 3;
+      }
+      if(420 < y && y < 500){
+        MLV_draw_text_with_font(127, 410, "Save 4", font2, MLV_COLOR_ORANGE);
+        choix = 4;
+      }
+      if(540 < y && y < 620){
+        MLV_draw_text_with_font(127, 530, "Save 5", font2, MLV_COLOR_ORANGE);
+        choix = 5;
+      }
+      if(660 < y && y < 740){
+        MLV_draw_text_with_font(127, 650, "Save 6", font2, MLV_COLOR_ORANGE);
+        choix = 6;
+      }
+      if(MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED){
+        clic++;
+      }
+    }
+    MLV_actualise_window();
+  }
+
+  MLV_free_font(font1);
+  MLV_free_font(font2);
+  MLV_free_window();
+  printf("%d\n", choix);
+  return choix;
+  exit(0);
+}
+
+/*---Fonction permettant le choix de la pièce quand le pion peut se changer---*/
+
+int choix_piece_pion(Joueur color){
+  int x, y, clic, choix;
+  MLV_Image *cava, *reine, *fou, *tour;
+
+  if(color){
+    cava = MLV_load_image("ressources/cavaN.png");
+    tour = MLV_load_image("ressources/tourN.png");
+    reine = MLV_load_image("ressources/dameN.png");
+    fou = MLV_load_image("ressources/fouN.png");
+  }
+  else{
+    cava = MLV_load_image("ressources/cavaB.png");
+    tour = MLV_load_image("ressources/tourB.png");
+    reine = MLV_load_image("ressources/dameB.png");
+    fou = MLV_load_image("ressources/fouB.png");
+  }
+  MLV_resize_image(cava, CASE*1.5, CASE*1.5);
+  MLV_resize_image(tour, CASE*1.5, CASE*1.5);
+  MLV_resize_image(reine, CASE*1.5, CASE*1.5);
+  MLV_resize_image(fou, CASE*1.5, CASE*1.5);
+
+  choix = 1;
+  clic = 0;
+  while(!clic){
+    MLV_draw_filled_rectangle(CASE*1, CASE*2.5, CASE*6, CASE*3, MLV_COLOR_BLACK);
+
+    MLV_get_mouse_position(&x, &y);
+    if(CASE*3.25 < y && y < CASE*4.75){
+      if(CASE*1.4 < x && x < CASE*2.6){
+        choix = 4;
+        MLV_draw_filled_rectangle(CASE*1.5, CASE*3.25, CASE*0.95, CASE*1.5, MLV_COLOR_RED);
+      }
+      if(CASE*2.8 < x && x < CASE*4){
+        choix = 3;
+        MLV_draw_filled_rectangle(CASE*2.9, CASE*3.25, CASE*0.91, CASE*1.5, MLV_COLOR_RED);
+      }
+      if(CASE*4.2 < x && x < CASE*5.4){
+        choix = 1;
+        MLV_draw_filled_rectangle(CASE*4.3, CASE*3.25, CASE*0.91, CASE*1.5, MLV_COLOR_RED);
+      }
+      if(CASE*5.6 < x && x < CASE*6.8){
+        choix = 2;
+        MLV_draw_filled_rectangle(CASE*5.7, CASE*3.25, CASE*0.91, CASE*1.5, MLV_COLOR_RED);
+      }
+      if(MLV_get_mouse_button_state(MLV_BUTTON_LEFT) == MLV_PRESSED){
+        clic++;
+      }
+    }
+    MLV_draw_image(cava, CASE*1.2, CASE*3.25);
+    MLV_draw_image(fou, CASE*2.6, CASE*3.25);
+    MLV_draw_image(reine, CASE*4, CASE*3.25);
+    MLV_draw_image(tour, CASE*5.4, CASE*3.25);
+    MLV_actualise_window();
+  }
+  MLV_free_image(cava);
+  MLV_free_image(reine);
+  MLV_free_image(tour);
+  MLV_free_image(fou);
+  return choix;
 }

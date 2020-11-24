@@ -1,9 +1,13 @@
 #include "assets.h"
 
-void save(Piece *board[][8], Joueur jActuel){
+/*------Fonction permettant la sauvegarde de la matrice de jeu------*/
+
+void save(Piece *board[][8], Joueur jActuel, int save_state){
   int i, j, x;
   FILE* save = NULL;
-  save = fopen("save", "w");
+  char save_name[6];
+  sprintf(save_name, "%s%d", "save", save_state);
+  save = fopen(save_name, "w");
 
   x = 0;
   for(i = 0; i < 8; i++){
@@ -38,11 +42,16 @@ void save(Piece *board[][8], Joueur jActuel){
   fclose(save);
 }
 
-Joueur load(Piece *board[][8], Piece pieces[32]){
+/*------Fonction permettant le chargement de la matrice de jeu------*/
+
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state){
   int i, j, x, y;
   Joueur jActuel;
   FILE* save = NULL;
-  save = fopen("save", "r+");
+  char save_name[6];
+  sprintf(save_name, "%s%d", "save", save_state);
+  save = fopen(save_name, "r+");
+  
   jActuel = fgetc(save);
   i = 0;
   j = fgetc(save);
@@ -70,6 +79,8 @@ Joueur load(Piece *board[][8], Piece pieces[32]){
   return jActuel;
 }
 
+/*------Fonction lisant un fichier texte et le mettant dans une string------*/
+
 void lecture_fic_lead(char *str){
   char c;
   int i = 0;
@@ -91,6 +102,7 @@ void lecture_fic_lead(char *str){
   fclose(lb);
 }
 
+/*------Fonction d'input pour les pseudos a la fin du jeu------*/
 
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
   char* text1;
@@ -109,6 +121,9 @@ void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
 
   MLV_free_window();
 }
+
+
+/*------Fonction d'input pour les pseudos a la fin du jeu------*/
 
 void lecture_leaderboard(JLeaderboard Leaderboard[10]){
   int i, j, k, champ;
@@ -206,6 +221,9 @@ void tri_leaderboard(int scores[2]){
   }
   fclose(lb);
 }
+
+
+/*------Fonction calculant le score des joueurs------*/
 
 int score(Piece *board[][8], Joueur color){
   int i, j, score;

@@ -315,6 +315,9 @@ Coord get_pos_roi(Piece *board[][8], unsigned int color){
   return pos;
 }
 
+
+/*------Fonction déterminant si une case de l'échiquier est mortelle------*/
+
 int est_mortel(Piece *board[][8], Coord pos, Joueur color){
   int i, j, x, moves[8];
   Coord enemy;
@@ -420,6 +423,8 @@ int est_mortel(Piece *board[][8], Coord pos, Joueur color){
   }
   return 0;
 }
+
+/*------Fonction déterminant si le roi est échec (si la case ou il se trouve est mortelle)------*/
 
 int est_echec(Piece *board[][8], unsigned int color){
   Coord pos = get_pos_roi(board, color);
@@ -542,6 +547,8 @@ void moves_legaux(Piece *board[][8], Coord pos, int *moves){
   }
 }
 
+/*------Fonction déterminant si un mouvement est légal------*/
+
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
   int i, j, start;
   char alterne_angle[] = {'c', 'C'};
@@ -621,6 +628,34 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
   return 1;
 }
 
+/*---Fonction vérifiant si un pion peut se changer---*/
+
+void pion_ligne_finale(Piece *board[][8], Coord xy){
+  int x = xy.x, y = xy.y, choix = 0;
+  if(board[y][x]->rang == Pion){
+    if(board[y][x]->couleur == Noir && y == 7){
+      choix = choix_piece_pion(board[y][x]->couleur);
+    }
+    if(board[y][x]->couleur == Blanc && y == 0){
+      choix = choix_piece_pion(board[y][x]->couleur);
+    }
+  }
+  if(choix != 0){
+    board[y][x]->rang = choix;
+    if(board[y][x]->rang == Reine){
+      deplace_reine(board[y][x]);
+    }
+    if(board[y][x]->rang == Cavalier){
+      deplace_cavalier(board[y][x]);
+    }
+    if(board[y][x]->rang == Tour){
+      deplace_tour(board[y][x]);
+    }
+    if(board[y][x]->rang == Fou){
+      deplace_fou(board[y][x]);
+    }
+  }
+}
 
 /*Mise à jour / Conservation de la cohérence du jeu*/
 void maj_board(Piece *board[][8], Coord old, Coord new){
@@ -673,4 +708,7 @@ void maj_board(Piece *board[][8], Coord old, Coord new){
       board[new.y][0] = NULL;
     }
   }
+
+  /*Vérification de la potentielle transformation du pion*/
+  pion_ligne_finale(board, new);
 }
