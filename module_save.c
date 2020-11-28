@@ -2,12 +2,13 @@
 
 /*------Fonction permettant la sauvegarde de la matrice de jeu------*/
 
-void save(Piece *board[][8], Joueur jActuel, int save_state){
+void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b){
   int i, j, x;
   FILE* save = NULL;
   char save_name[6];
-  sprintf(save_name, "%s%d", "save", save_state);
-  save = fopen(save_name, "w");
+  sprintf(save_name, "save%d", save_state);
+  remove(save_name);
+  save = fopen(save_name, "a+");
 
   x = 0;
   for(i = 0; i < 8; i++){
@@ -39,19 +40,27 @@ void save(Piece *board[][8], Joueur jActuel, int save_state){
       }
     }
   }
+  fputc(morts_w[0], save);
+  for(i = 1; i < morts_w[0]+1; i++){
+    fputc(morts_w[i], save);
+  }
+  fputc(morts_b[0], save);
+  for(i = 1; i < morts_b[0]+1; i++){
+    fputc(morts_b[i], save);
+  }
   fclose(save);
 }
 
 /*------Fonction permettant le chargement de la matrice de jeu------*/
 
-Joueur load(Piece *board[][8], Piece pieces[32], int save_state){
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b){
   int i, j, x, y;
   Joueur jActuel;
   FILE* save = NULL;
   char save_name[6];
-  sprintf(save_name, "%s%d", "save", save_state);
+  sprintf(save_name, "save%d", save_state);
   save = fopen(save_name, "r+");
-  
+
   jActuel = fgetc(save);
   i = 0;
   j = fgetc(save);
@@ -74,7 +83,14 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state){
       pieces[i].move.ajustement[1] = fgetc(save);
     board[x][y] = &pieces[i];
   }
-
+  morts_w[0] = fgetc(save);
+  for(i = 1; i < morts_w[0]+1; i++){
+    morts_w[i] = fgetc(save);
+  }
+  morts_b[0] = fgetc(save);
+  for(i = 1; i < morts_b[0]+1; i++){
+    morts_b[i] = fgetc(save);
+  }
   fclose(save);
   return jActuel;
 }

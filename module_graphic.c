@@ -96,44 +96,66 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
 
 /*GESTION DU CLIC*/
 
-Coord clic_or_save(Piece *board[][8], Joueur jActuel){
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b){
   Coord map;
   int x, y;
-  int touche;
+  int save_button = 0;
   x = -1;
   y = -1;
   map.x = x;
   map.y = y;
-  touche = ' ';
-  while(en_dehors(map) && touche != 's'){
-    MLV_wait_keyboard_or_mouse( NULL, NULL, &touche, &x, &y);
 
-    map.x = x/CASE;
-    map.y = y/CASE;
+  while(MLV_get_mouse_button_state(MLV_BUTTON_LEFT) != MLV_PRESSED && save_button == 0){
+    MLV_get_mouse_position(&map.x, &map.y);
+    map.x /= CASE;
+    map.y /= CASE;
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP1) == MLV_PRESSED){
+      save_button = 1;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP2) == MLV_PRESSED){
+      save_button = 2;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP3) == MLV_PRESSED){
+      save_button = 3;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP4) == MLV_PRESSED){
+      save_button = 4;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP5) == MLV_PRESSED){
+      save_button = 5;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP6) == MLV_PRESSED){
+      save_button = 6;
+    }
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP1) == MLV_PRESSED){
+      save_button = 1;
+    }
+    update_time(clock1, clock2, clock_init);
+    draw_timer(clock1, jActuel);
   }
-  switch(touche){
-    case '1':
-      save(board, jActuel, 1);
+  switch(save_button){
+    case 1:
+      save(board, jActuel, 1, morts_w, morts_b);
       exit(0);
       break;
-    case '2':
-      save(board, jActuel, 2);
+    case 2:
+      save(board, jActuel, 2, morts_w, morts_b);
       exit(0);
       break;
-    case '3':
-      save(board, jActuel, 3);
+    case 3:
+      save(board, jActuel, 3, morts_w, morts_b);
       exit(0);
       break;
-    case '4':
-      save(board, jActuel, 4);
+    case 4:
+      save(board, jActuel, 4, morts_w, morts_b);
       exit(0);
       break;
-    case '5':
-      save(board, jActuel, 5);
+    case 5:
+      save(board, jActuel, 5, morts_w, morts_b);
       exit(0);
       break;
-    case '6':
-      save(board, jActuel, 6);
+    case 6:
+      save(board, jActuel, 6, morts_w, morts_b);
       exit(0);
       break;
     default:
@@ -164,7 +186,7 @@ void screen_fin_partie(Joueur color){
 /*------Fonction affichant le texte rappellant au joueur qu'il peut sauvegarder------*/
 
 void affichage_save(){
-  MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", CASE/2);
+  MLV_Font* font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", CASE/4);
   MLV_draw_text_with_font(CASE/4, CASE*8+CASE/5, "Press 1-6 to Save&Quit", font, MLV_COLOR_RED);
   MLV_actualise_window();
   MLV_free_font(font);
@@ -252,7 +274,6 @@ int save_state(){
   MLV_free_font(font1);
   MLV_free_font(font2);
   MLV_free_window();
-  printf("%d\n", choix);
   return choix;
   exit(0);
 }
@@ -318,4 +339,90 @@ int choix_piece_pion(Joueur color){
   MLV_free_image(tour);
   MLV_free_image(fou);
   return choix;
+}
+
+void draw_timer(montre *clock, Joueur jActuel){
+   MLV_Font *font;
+   char montre[20];
+
+   font = MLV_load_font("ressources/polices/police_anc.ttf", CASE/2);
+   sprintf(montre, "%d:%d:%d", clock->h, clock->m, clock->s);
+   if(jActuel){
+     MLV_draw_filled_rectangle(CASE*6.2, CASE*8, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(6.5*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+   }
+   else{
+     MLV_draw_filled_rectangle(CASE*4.2, CASE*8, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(4.5*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+   }
+   MLV_actualise_window();
+   MLV_free_font(font);
+}
+
+void actualise_morts(int *morts_w, int *morts_b){
+  int i;
+  MLV_Image *cava, *reine, *fou, *tour, *pion;
+
+  cava = MLV_load_image("ressources/cavaN.png");
+  tour = MLV_load_image("ressources/tourN.png");
+  reine = MLV_load_image("ressources/dameN.png");
+  fou = MLV_load_image("ressources/fouN.png");
+  pion = MLV_load_image("ressources/pionN.png");
+  MLV_resize_image(cava, CASE*0.5, CASE*0.5);
+  MLV_resize_image(tour, CASE*0.5, CASE*0.5);
+  MLV_resize_image(reine, CASE*0.5, CASE*0.5);
+  MLV_resize_image(fou, CASE*0.5, CASE*0.5);
+  MLV_resize_image(pion, CASE*0.5, CASE*0.5);
+
+  for(i = 1; i < morts_b[0]+1; i++){
+    if(morts_b[i] == 1){
+      MLV_draw_image(reine, i*CASE*0.5-CASE*0.4, CASE*8.7);
+    }
+    if(morts_b[i] == 2){
+      MLV_draw_image(tour, i*CASE*0.5-CASE*0.4, CASE*8.7);
+    }
+    if(morts_b[i] == 3){
+      MLV_draw_image(fou, i*CASE*0.5-CASE*0.4, CASE*8.7);
+    }
+    if(morts_b[i] == 4){
+      MLV_draw_image(cava, i*CASE*0.5-CASE*0.4, CASE*8.7);
+    }
+    if(morts_b[i] == 5){
+      MLV_draw_image(pion, i*CASE*0.5-CASE*0.4, CASE*8.7);
+    }
+  }
+  cava = MLV_load_image("ressources/cavaB.png");
+  tour = MLV_load_image("ressources/tourB.png");
+  reine = MLV_load_image("ressources/dameB.png");
+  fou = MLV_load_image("ressources/fouB.png");
+  pion = MLV_load_image("ressources/pionB.png");
+  MLV_resize_image(cava, CASE*0.5, CASE*0.5);
+  MLV_resize_image(tour, CASE*0.5, CASE*0.5);
+  MLV_resize_image(reine, CASE*0.5, CASE*0.5);
+  MLV_resize_image(fou, CASE*0.5, CASE*0.5);
+  MLV_resize_image(pion, CASE*0.5, CASE*0.5);
+
+  for(i = 1; i < morts_w[0]+1; i++){
+    if(morts_w[i] == 1){
+      MLV_draw_image(reine, i*CASE*0.5-CASE*0.4, CASE*9.3);
+    }
+    if(morts_w[i] == 2){
+      MLV_draw_image(tour, i*CASE*0.5-CASE*0.4, CASE*9.3);
+    }
+    if(morts_w[i] == 3){
+      MLV_draw_image(fou, i*CASE*0.5-CASE*0.4, CASE*9.3);
+    }
+    if(morts_w[i] == 4){
+      MLV_draw_image(cava, i*CASE*0.5-CASE*0.4, CASE*9.3);
+    }
+    if(morts_w[i] == 5){
+      MLV_draw_image(pion, i*CASE*0.5-CASE*0.4, CASE*9.3);
+    }
+  }
+
+  MLV_free_image(cava);
+  MLV_free_image(reine);
+  MLV_free_image(tour);
+  MLV_free_image(fou);
+  MLV_free_image(pion);
 }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
 #include <string.h>
+#include <time.h>
 
 #define CASE 80
 
@@ -54,6 +55,13 @@ typedef struct
 	char pseudo[50];
 } JLeaderboard;
 
+typedef struct
+{
+	int h;
+	int m;
+	int s;
+} montre;
+
 /*----------------------Module mathématique------------------------*/
 int sgn(int i);
 Coord rotation(Coord vect, float mat_rot[]);
@@ -84,12 +92,14 @@ void make_grid();
 void color_piece();
 void indic_deplace(Piece *board[][8], Coord pos, int *moves);
 void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
-Coord clic_or_save(Piece *board[][8], Joueur jActuel);
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b);
 void screen_fin_partie(Joueur color);
 void affichage_save();
 void aff_leaderboard();
 int save_state();
 int choix_piece_pion(Joueur color);
+void draw_timer(montre *clock, Joueur jActuel);
+void actualise_morts(int *morts_w, int *morts_b);
 
 /*--------------------Module d'initialisation----------------------*/
 
@@ -118,9 +128,17 @@ int jeu(int choix, int *scores);
 
 /*---------------------Module de sauvegarde-------------------------*/
 
-void save(Piece *board[][8], Joueur jActuel, int save_state);
-Joueur load(Piece *board[][8], Piece pieces[32], int save_state);
+void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b);
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b);
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2);
 int score(Piece *board[][8], Joueur color);
 void lecture_leaderboard(JLeaderboard Leaderboard[10]);
 void tri_leaderboard(int scores[2]);
+
+/*------------------------Module du timer----------------------------*/
+
+int compt_sec(montre *clock);
+void reinject_clock(montre *clock, int sec);
+void set_local_time(montre *clock);
+void update_time(montre *clock1, montre *clock2, montre clock_init);
+void set_clock(montre *clock);

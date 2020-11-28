@@ -2,9 +2,9 @@ CC=gcc
 CFLAGS=-W -Wall -std=c89 -pedantic -O3 -g
 CGRAPH=`pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV`
 ENDFLAGS=`pkg-config --libs-only-l MLV`
-
-main : module_graphic.o module_verif.o init-module.o module_menu.o module_jeu.o module_save.o module_math.o main.o
-	$(CC) $(CFLAGS) $(CGRAPH) module_graphic.o module_verif.o init-module.o module_menu.o module_jeu.o module_save.o module_math.o main.o $(ENDFLAGS) -o main
+TARGET=module_graphic.o module_verif.o init-module.o module_menu.o module_jeu.o module_save.o module_math.o module_timer.o main.o
+main : $(TARGET)
+	$(CC) $(CFLAGS) $(CGRAPH) $(TARGET) $(ENDFLAGS) -o main
 
 main.o : main.c assets.h
 	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) main.c
@@ -29,6 +29,9 @@ module_save.o : module_save.c assets.h
 
 module_math.o : module_math.c assets.h
 	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) module_math.c
+
+module_timer.o : module_timer.c assets.h
+	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) module_timer.c
 
 clean :
 	rm -rf *.o main
