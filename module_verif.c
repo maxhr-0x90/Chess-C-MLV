@@ -170,7 +170,7 @@ void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
       }
     }
   }
-  
+
   /*--1--*/
   if (pion->couleur == Noir) {
     /*--2--*/
@@ -605,8 +605,8 @@ int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves){
 }
 
 
-/*Endgame*/
-int est_echec_et_mat(Piece *board[][8], Joueur color){
+/*-------------Endgame-------------*/
+int zero_moves(Piece *board[][8], Joueur color){
   int i, j, k, move[9];
   Coord pos;
 
@@ -626,6 +626,38 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
     }
   }
   return 1;
+}
+
+int est_echec_et_mat(Piece *board[][8], Joueur color){
+  int result;
+
+  result = zero_moves(board, color);
+  result &= est_echec(board, color);
+
+  return result;
+}
+
+int pat(Piece *board[][8], Joueur color){
+  int result;
+
+  result = zero_moves(board, color);
+  result &= !(est_echec(board, color));
+
+  return result;
+}
+
+int seulement_rois(Piece *board[][8]){
+  int i, j, count = 0;
+
+  for(i = 0; i < 8; i++){
+    for(j = 0; j < 8; j++){
+      if(board[i][j] != NULL){
+        count++;
+      }
+    }
+  }
+
+  return (count == 2);
 }
 
 /*---Fonction vérifiant si un pion peut se changer---*/

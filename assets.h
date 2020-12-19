@@ -82,7 +82,10 @@ int est_mortel(Piece *board[][8], Coord pos, Joueur color);
 int est_echec(Piece *board[][8], unsigned int color);
 void moves_legaux(Piece *board[][8], Coord pos, int *moves);
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
+int zero_moves(Piece *board[][8], Joueur color);
 int est_echec_et_mat(Piece *board[][8], Joueur color);
+int pat(Piece *board[][8], Joueur color);
+int seulement_rois(Piece *board[][8]);
 void pion_ligne_finale(Piece *board[][8], Coord xy);
 void maj_board(Piece *board[][8], Coord old, Coord new);
 
