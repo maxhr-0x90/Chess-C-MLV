@@ -12,7 +12,7 @@ int menu(){
   MLV_create_window("menu", "menu", 400, 800);
   MLV_init_audio();
 
-  image = MLV_load_image("ressources/issou_corp.png");
+  image = MLV_load_image("ressources/assets/issou_corp.png");
   menu1 = MLV_load_music("ressources/OST/menu1.mp3");
   menu2 = MLV_load_music("ressources/OST/menu2.mp3");
   menu_intro = MLV_load_music("ressources/OST/menu_intro.mp3");

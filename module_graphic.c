@@ -17,7 +17,7 @@ void make_grid(){
 void color_piece(Piece *board[][8]){
   int i, j;
 	char path[25];
-	char *folder = "ressources/";
+	char *folder = "ressources/pieces/";
 	char *ext = ".png";
 	char color[][2] = {"B", "N"};
 	char images_tab[][5] = {"roi", "dame", "tour", "fou", "cava", "pion"};
@@ -109,26 +109,23 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *cl
     MLV_get_mouse_position(&map.x, &map.y);
     map.x /= CASE;
     map.y /= CASE;
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP1) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_AMPERSAND) == MLV_PRESSED){
       save_button = 1;
     }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP2) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_WORLD_73) == MLV_PRESSED){
       save_button = 2;
     }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP3) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_QUOTEDBL) == MLV_PRESSED){
       save_button = 3;
     }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP4) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_QUOTE) == MLV_PRESSED){
       save_button = 4;
     }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP5) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_LEFTPAREN) == MLV_PRESSED){
       save_button = 5;
     }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP6) == MLV_PRESSED){
+    if(MLV_get_keyboard_state(MLV_KEYBOARD_MINUS) == MLV_PRESSED){
       save_button = 6;
-    }
-    if(MLV_get_keyboard_state(MLV_KEYBOARD_KP1) == MLV_PRESSED){
-      save_button = 1;
     }
     update_time(clock1, clock2, clock_init);
     draw_timer(clock1, jActuel);
@@ -200,7 +197,7 @@ void aff_leaderboard(){
   char score[50];
   int i = 0;
   lecture_leaderboard(Lead);
-  MLV_create_window("Leaderboard", "Leaderboard", 4*CASE, 8*CASE);
+  MLV_create_window("Leaderboard", "Leaderboard", 400, 800);
 
   font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 30);
   do{
@@ -283,18 +280,20 @@ int save_state(){
 int choix_piece_pion(Joueur color){
   int x, y, clic, choix;
   MLV_Image *cava, *reine, *fou, *tour;
+  MLV_Sound* transf_sound;
+  transf_sound = MLV_load_sound("ressources/OST/changePion.wav");
 
   if(color){
-    cava = MLV_load_image("ressources/cavaN.png");
-    tour = MLV_load_image("ressources/tourN.png");
-    reine = MLV_load_image("ressources/dameN.png");
-    fou = MLV_load_image("ressources/fouN.png");
+    cava = MLV_load_image("ressources/pieces/cavaN.png");
+    tour = MLV_load_image("ressources/pieces/tourN.png");
+    reine = MLV_load_image("ressources/pieces/dameN.png");
+    fou = MLV_load_image("ressources/pieces/fouN.png");
   }
   else{
-    cava = MLV_load_image("ressources/cavaB.png");
-    tour = MLV_load_image("ressources/tourB.png");
-    reine = MLV_load_image("ressources/dameB.png");
-    fou = MLV_load_image("ressources/fouB.png");
+    cava = MLV_load_image("ressources/pieces/cavaB.png");
+    tour = MLV_load_image("ressources/pieces/tourB.png");
+    reine = MLV_load_image("ressources/pieces/dameB.png");
+    fou = MLV_load_image("ressources/pieces/fouB.png");
   }
   MLV_resize_image(cava, CASE*1.5, CASE*1.5);
   MLV_resize_image(tour, CASE*1.5, CASE*1.5);
@@ -338,6 +337,7 @@ int choix_piece_pion(Joueur color){
   MLV_free_image(reine);
   MLV_free_image(tour);
   MLV_free_image(fou);
+  MLV_play_sound(transf_sound, 0.5);
   return choix;
 }
 
@@ -363,11 +363,11 @@ void actualise_morts(int *morts_w, int *morts_b){
   int i;
   MLV_Image *cava, *reine, *fou, *tour, *pion;
 
-  cava = MLV_load_image("ressources/cavaN.png");
-  tour = MLV_load_image("ressources/tourN.png");
-  reine = MLV_load_image("ressources/dameN.png");
-  fou = MLV_load_image("ressources/fouN.png");
-  pion = MLV_load_image("ressources/pionN.png");
+  cava = MLV_load_image("ressources/pieces/cavaN.png");
+  tour = MLV_load_image("ressources/pieces/tourN.png");
+  reine = MLV_load_image("ressources/pieces/dameN.png");
+  fou = MLV_load_image("ressources/pieces/fouN.png");
+  pion = MLV_load_image("ressources/pieces/pionN.png");
   MLV_resize_image(cava, CASE*0.5, CASE*0.5);
   MLV_resize_image(tour, CASE*0.5, CASE*0.5);
   MLV_resize_image(reine, CASE*0.5, CASE*0.5);
@@ -391,11 +391,11 @@ void actualise_morts(int *morts_w, int *morts_b){
       MLV_draw_image(pion, i*CASE*0.5-CASE*0.4, CASE*8.7);
     }
   }
-  cava = MLV_load_image("ressources/cavaB.png");
-  tour = MLV_load_image("ressources/tourB.png");
-  reine = MLV_load_image("ressources/dameB.png");
-  fou = MLV_load_image("ressources/fouB.png");
-  pion = MLV_load_image("ressources/pionB.png");
+  cava = MLV_load_image("ressources/pieces/cavaB.png");
+  tour = MLV_load_image("ressources/pieces/tourB.png");
+  reine = MLV_load_image("ressources/pieces/dameB.png");
+  fou = MLV_load_image("ressources/pieces/fouB.png");
+  pion = MLV_load_image("ressources/pieces/pionB.png");
   MLV_resize_image(cava, CASE*0.5, CASE*0.5);
   MLV_resize_image(tour, CASE*0.5, CASE*0.5);
   MLV_resize_image(reine, CASE*0.5, CASE*0.5);
