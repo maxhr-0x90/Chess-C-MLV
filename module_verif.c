@@ -170,7 +170,7 @@ void ajustement_p_possible(Piece *board[][8], Coord pos, int *moves){
       }
     }
   }
-
+  
   /*--1--*/
   if (pion->couleur == Noir) {
     /*--2--*/
@@ -618,7 +618,7 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
 
         moves_legaux(board, pos, move);
         for(k = 0; k < 8; k++){
-          if(move[k] != 0 && move[k] != -1){
+          if(move[k] != 0){
             return 0;
           }
         }
@@ -632,8 +632,9 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
 
 void pion_ligne_finale(Piece *board[][8], Coord xy){
   int x = xy.x, y = xy.y, choix = 0;
+
   if(board[y][x]->rang == Pion){
-    if(board[y][x]->couleur == Noir && y == 7){
+    if(board[y][x]->couleur == Noir && y == 0){
       choix = choix_piece_pion(board[y][x]->couleur);
     }
     if(board[y][x]->couleur == Blanc && y == 0){
