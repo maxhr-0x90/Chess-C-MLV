@@ -20,7 +20,13 @@ int presence_roi(Piece *board[][8], Joueur color){
 
 int analyse_editor_clic_1(Coord pos, int act_choix){
   int x = pos.x, y = pos.y, piece_choisie;
-  if(y > CASE*8 && CASE < x && x < CASE*7){
+  if(CASE*8.6 < y && y < CASE*9.5 && 0 < x && x < CASE){
+    return 14;
+  }
+  if(CASE*8.5 < y && y < CASE*9.5 && CASE*7 < x && x < CASE*8){
+    return 13;
+  }
+  if(CASE*8 < y && y < CASE*10 && CASE < x && x < CASE*7){
     if(CASE < x && x < CASE*2){
       piece_choisie = 0;
     }
@@ -50,123 +56,98 @@ int analyse_editor_clic_1(Coord pos, int act_choix){
 void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int choix){
   Joueur Jmodif = choix < 6;
   Piece nvPiece;
-  int i = 0, x = pos.x/CASE, y = pos.y/CASE;
-  if(pos.y < CASE*8){
+  int i = 0, x = pos.x/CASE, y = pos.y/CASE, assign = 0;
+
+  if(pos.y < CASE*8 && choix != 13){
     while(set_pieces[i].couleur != Nulle){
       i++;
     }
     if(presence_roi(board, Jmodif) != 1){
-      if(board[y][x] == NULL){
-        nvPiece.rang = choix%6;
-        nvPiece.couleur = Jmodif;
-        set_pieces[i] = nvPiece;
-        board[y][x] = &set_pieces[i];
-      }
-      else{
-        board[y][x]->rang = choix%6;
-        nvPiece.couleur = Jmodif;
-      }
+      nvPiece.rang = choix%6;
+      nvPiece.couleur = Jmodif;
+      assign = 1;
     }
     else{
       if(choix%6 != 0){
         if(board[y][x] == NULL){
           nvPiece.rang = choix%6;
           nvPiece.couleur = Jmodif;
-          set_pieces[i] = nvPiece;
-          board[y][x] = &set_pieces[i];
+          assign = 1;
         }
-        else{
-          board[y][x]->rang = choix%6;
-          nvPiece.couleur = Jmodif;
-        }
+      }
+    }
+    if(assign){
+      switch(nvPiece.rang){
+        case Roi:
+          deplace_roi(&nvPiece);
+          break;
+        case Reine:
+          deplace_reine(&nvPiece);
+          break;
+        case Tour:
+          deplace_tour(&nvPiece);
+          break;
+        case Cavalier:
+          deplace_cavalier(&nvPiece);
+          break;
+        case Fou:
+          deplace_fou(&nvPiece);
+          break;
+        case Pion:
+          deplace_pion(&nvPiece);
+          break;
+      }
+      set_pieces[i] = nvPiece;
+      board[y][x] = &set_pieces[i];
+    }
+  }
+  else{
+    if(pos.y < CASE*8){
+      if(board[y][x] != NULL){
+        board[y][x]->couleur = Nulle;
+        board[y][x] = NULL;
       }
     }
   }
 }
 
-
-
-void dessiner_pieces(int emplacement){
-  MLV_Image *cava, *reine, *fou, *tour, *roi, *pion, *cross;
-
-  MLV_draw_filled_rectangle(CASE, CASE*8, CASE*6, CASE*2, MLV_COLOR_BLACK);
-  MLV_draw_filled_rectangle(CASE+CASE*(emplacement%6), CASE*8+(emplacement/6)*CASE, CASE, CASE, MLV_COLOR_RED);
-
-  roi = MLV_load_image("ressources/assets/cross.png");
-  roi = MLV_load_image("ressources/pieces/roiN.png");
-  reine = MLV_load_image("ressources/pieces/dameN.png");
-  tour = MLV_load_image("ressources/pieces/tourN.png");
-  fou = MLV_load_image("ressources/pieces/fouN.png");
-  cava = MLV_load_image("ressources/pieces/cavaN.png");
-  pion = MLV_load_image("ressources/pieces/pionN.png");
-  MLV_resize_image(roi, CASE, CASE);
-  MLV_resize_image(reine, CASE, CASE);
-  MLV_resize_image(tour, CASE, CASE);
-  MLV_resize_image(fou, CASE, CASE);
-  MLV_resize_image(cava, CASE, CASE);
-  MLV_resize_image(pion, CASE, CASE);
-  MLV_draw_image(roi, CASE, CASE*8);
-  MLV_draw_image(reine, CASE*2, CASE*8);
-  MLV_draw_image(tour, CASE*3, CASE*8);
-  MLV_draw_image(fou, CASE*4, CASE*8);
-  MLV_draw_image(cava, CASE*5, CASE*8);
-  MLV_draw_image(pion, CASE*6, CASE*8);
-
-
-  roi = MLV_load_image("ressources/pieces/roiB.png");
-  reine = MLV_load_image("ressources/pieces/dameB.png");
-  tour = MLV_load_image("ressources/pieces/tourB.png");
-  fou = MLV_load_image("ressources/pieces/fouB.png");
-  cava = MLV_load_image("ressources/pieces/cavaB.png");
-  pion = MLV_load_image("ressources/pieces/pionB.png");
-  MLV_resize_image(roi, CASE, CASE);
-  MLV_resize_image(reine, CASE, CASE);
-  MLV_resize_image(tour, CASE, CASE);
-  MLV_resize_image(fou, CASE, CASE);
-  MLV_resize_image(cava, CASE, CASE);
-  MLV_resize_image(pion, CASE, CASE);
-  MLV_draw_image(roi, CASE, CASE*9);
-  MLV_draw_image(reine, CASE*2, CASE*9);
-  MLV_draw_image(tour, CASE*3, CASE*9);
-  MLV_draw_image(fou, CASE*4, CASE*9);
-  MLV_draw_image(cava, CASE*5, CASE*9);
-  MLV_draw_image(pion, CASE*6, CASE*9);
-}
-
 void editor(Piece *board[][8], Piece *set_pieces){
-  int i, j, piece_choisie = 0;
+  int i, piece_choisie = 0, sortie = 0;
   Piece nul;
   Coord pos;
+  MLV_Font *font;
+
   for(i = 0; i < 64; i++){
     nul.couleur = Nulle;
     set_pieces[i] = nul;
   }
-  MLV_create_window("editor_mod", "editor_mod", CASE*8, CASE*10);
+  MLV_create_window("editor_mod", "editor_mod", CASE*8, CASE*10.5);
+  font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 20);
+  MLV_draw_text_with_font(CASE*1.4, CASE*10, "To save and play, click on OK", font, MLV_COLOR_RED);
+  font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 40);
+  MLV_draw_text_with_font(CASE*0.1, CASE*8.6, "OK", font, MLV_COLOR_GREEN);
+  MLV_free_font(font);
+
   dessiner_pieces(piece_choisie);
   vider_plateau(board);
   make_grid();
   MLV_actualise_window();
-  while(1){
+
+  while(!sortie){
     pos = editor_clic();
     piece_choisie = analyse_editor_clic_1(pos, piece_choisie);
-    analyse_editor_clic_2(board, set_pieces, pos, piece_choisie);
-    dessiner_pieces(piece_choisie);
-    make_grid();
-    /*
-    for(i = 0; i < 8; i++){
-      for(j = 0; j < 8; j++){
-        if(board[i][j] != NULL){
-          printf("%d ", board[i][j]->rang);
-        }
-        else{
-          printf("N ");
-        }
-      }
-      printf("\n");
+    printf("%d\n", piece_choisie);
+    if(piece_choisie < 14){
+      analyse_editor_clic_2(board, set_pieces, pos, piece_choisie);
+      dessiner_pieces(piece_choisie);
+      make_grid();
+      color_piece(board);
     }
-    */
-    color_piece(board);
+    else{
+      if(presence_roi(board, Noir) && presence_roi(board, Blanc) && !est_echec(board, Noir) && !est_echec(board, Blanc)){
+        sortie = 1;
+      }
+    }
   }
-  MLV_wait_seconds(3);
-  exit(0);
+  MLV_free_window();
 }

@@ -346,14 +346,14 @@ void draw_timer(montre *clock, Joueur jActuel){
    char montre[20];
 
    font = MLV_load_font("ressources/polices/police_anc.ttf", CASE/2);
-   sprintf(montre, "%d:%d:%d", clock->h, clock->m, clock->s);
+   sprintf(montre, "%d:%02d:%02d", clock->h, clock->m, clock->s);
    if(jActuel){
-     MLV_draw_filled_rectangle(CASE*6.2, CASE*8, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
-     MLV_draw_text_with_font(6.5*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+     MLV_draw_filled_rectangle(CASE*6, CASE*8.2, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(6*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
    }
    else{
-     MLV_draw_filled_rectangle(CASE*4.2, CASE*8, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
-     MLV_draw_text_with_font(4.5*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+     MLV_draw_filled_rectangle(CASE*4, CASE*8.2, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(4*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
    }
    MLV_actualise_window();
    MLV_free_font(font);
@@ -425,4 +425,57 @@ void actualise_morts(int *morts_w, int *morts_b){
   MLV_free_image(tour);
   MLV_free_image(fou);
   MLV_free_image(pion);
+}
+
+void dessiner_pieces(int emplacement){
+  MLV_Image *cava, *reine, *fou, *tour, *roi, *pion, *cross;
+
+  MLV_draw_filled_rectangle(CASE, CASE*8, CASE*8, CASE*2, MLV_COLOR_BLACK);
+  if(emplacement < 13){
+    MLV_draw_filled_rectangle(CASE+CASE*(emplacement%6), CASE*8+(emplacement/6)*CASE, CASE, CASE, MLV_COLOR_RED);
+  }
+  else{
+    MLV_draw_rectangle(CASE*7, CASE*8.5, CASE, CASE, MLV_COLOR_RED);
+  }
+  cross = MLV_load_image("ressources/assets/cross.png");
+  roi = MLV_load_image("ressources/pieces/roiN.png");
+  reine = MLV_load_image("ressources/pieces/dameN.png");
+  tour = MLV_load_image("ressources/pieces/tourN.png");
+  fou = MLV_load_image("ressources/pieces/fouN.png");
+  cava = MLV_load_image("ressources/pieces/cavaN.png");
+  pion = MLV_load_image("ressources/pieces/pionN.png");
+  MLV_resize_image(cross, CASE, CASE);
+  MLV_resize_image(roi, CASE, CASE);
+  MLV_resize_image(reine, CASE, CASE);
+  MLV_resize_image(tour, CASE, CASE);
+  MLV_resize_image(fou, CASE, CASE);
+  MLV_resize_image(cava, CASE, CASE);
+  MLV_resize_image(pion, CASE, CASE);
+  MLV_draw_image(roi, CASE, CASE*8);
+  MLV_draw_image(reine, CASE*2, CASE*8);
+  MLV_draw_image(tour, CASE*3, CASE*8);
+  MLV_draw_image(fou, CASE*4, CASE*8);
+  MLV_draw_image(cava, CASE*5, CASE*8);
+  MLV_draw_image(pion, CASE*6, CASE*8);
+  MLV_draw_image(cross, CASE*7, CASE*8.5);
+
+
+  roi = MLV_load_image("ressources/pieces/roiB.png");
+  reine = MLV_load_image("ressources/pieces/dameB.png");
+  tour = MLV_load_image("ressources/pieces/tourB.png");
+  fou = MLV_load_image("ressources/pieces/fouB.png");
+  cava = MLV_load_image("ressources/pieces/cavaB.png");
+  pion = MLV_load_image("ressources/pieces/pionB.png");
+  MLV_resize_image(roi, CASE, CASE);
+  MLV_resize_image(reine, CASE, CASE);
+  MLV_resize_image(tour, CASE, CASE);
+  MLV_resize_image(fou, CASE, CASE);
+  MLV_resize_image(cava, CASE, CASE);
+  MLV_resize_image(pion, CASE, CASE);
+  MLV_draw_image(roi, CASE, CASE*9);
+  MLV_draw_image(reine, CASE*2, CASE*9);
+  MLV_draw_image(tour, CASE*3, CASE*9);
+  MLV_draw_image(fou, CASE*4, CASE*9);
+  MLV_draw_image(cava, CASE*5, CASE*9);
+  MLV_draw_image(pion, CASE*6, CASE*9);
 }

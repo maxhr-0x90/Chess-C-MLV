@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-#define CASE 80
+#define CASE 60
 
 #define TRUE 1
 #define FALSE 0
@@ -13,6 +13,7 @@
 
 typedef enum{Blanc, Noir, Nulle} Joueur;
 typedef enum{Roi, Reine, Tour, Fou, Cavalier, Pion} TypePiece;
+typedef enum{Play, Editor, Load, Quit, Leaderboard} ChoixMenu;
 
 typedef struct
 {
@@ -33,7 +34,6 @@ typedef struct
 	TypePiece rang;
 	Joueur couleur;
 	unsigned char nbMouv;
-	Bool estVivant;
 	Deplacement move;
 } Piece;
 
@@ -103,6 +103,7 @@ int save_state();
 int choix_piece_pion(Joueur color);
 void draw_timer(montre *clock, Joueur jActuel);
 void actualise_morts(int *morts_w, int *morts_b);
+void dessiner_pieces(int emplacement);
 
 /*--------------------Module d'initialisation----------------------*/
 
@@ -123,7 +124,7 @@ void init_deplacement(Piece pieces[32]);
 /*-------------------------Module du menu---------------------------*/
 
 /*void leaderboard();*/
-int menu();
+ChoixMenu menu();
 
 /*-------------------------Module de jeu----------------------------*/
 

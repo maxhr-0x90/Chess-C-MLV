@@ -1,29 +1,31 @@
 #include "assets.h"
 
 int main(){
-  int choix, scores[2];
+  int scores[2];
+  ChoixMenu choix;
 
   choix = menu();
-  while (choix != 8){
+  while (choix != Quit){
     switch(choix){
-      case 1:
+      case Play:
         screen_fin_partie(jeu(0, scores));
         tri_leaderboard(scores);
         break;
-      case 2:
+      case Load:
         screen_fin_partie(jeu(save_state(), scores));
         tri_leaderboard(scores);
         break;
-      case 9:
+      case Editor:
+        screen_fin_partie(jeu(8, scores));
+        tri_leaderboard(scores);
+        break;
+      case Leaderboard:
         aff_leaderboard();
         break;
       default:
         break;
     }
     choix = menu();
-  }/*
-  Piece *board[8][8];
-  Piece set[64];
-  editor(board, set);
-  */exit(0);
+  }
+  exit(0);
 }

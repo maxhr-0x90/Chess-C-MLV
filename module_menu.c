@@ -2,9 +2,10 @@
 
 /*------Fonction affichant le menu------*/
 
-int menu(){
-  int clic, choix;
+ChoixMenu menu(){
+  int clic;
   int x,y;
+  ChoixMenu choix;
   MLV_Music *menu1, *menu2, *menu_intro;
   MLV_Font *font1, *font2;
   MLV_Image *image;
@@ -56,9 +57,10 @@ int menu(){
     MLV_draw_text_with_font(290, 120, "ood", font2, MLV_COLOR_RED2);
 
     MLV_draw_text_with_font(150, 390, "Play", font2, MLV_COLOR_RED2);
-    MLV_draw_text_with_font(150, 470, "Load", font2, MLV_COLOR_RED2);
-    MLV_draw_text_with_font(130, 550, "Quitter", font2, MLV_COLOR_RED2);
-    MLV_draw_text_with_font(90, 630, "Leaderboard", font2, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(140, 470, "Editor", font2, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(150, 550, "Load", font2, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(130, 630, "Quitter", font2, MLV_COLOR_RED2);
+    MLV_draw_text_with_font(90, 710, "Leaderboard", font2, MLV_COLOR_RED2);
     MLV_get_mouse_position(&x, &y);
 
     if(x > 150 && x < 250 && y > 390 && y < 440){
@@ -67,37 +69,47 @@ int menu(){
       MLV_draw_text_with_font(145, 385, "Play", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
         clic = 1;
-        choix = 1;
+        choix = Play;
       }
     }
 
-    if(x > 150 && x < 250 && y > 470 && y < 520){
-      MLV_free_font(font2);
-      font2 = MLV_load_font("ressources/polices/police_anc.ttf", 45);
-      MLV_draw_text_with_font(143, 465, "Load", font2, MLV_COLOR_ORANGE);
-      if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
-        clic = 1;
-        choix = 2;
-      }
-    }
-
-    if(x > 130 && x < 270 && y > 550 && y < 600){
+    if(x > 130 && x < 270 && y > 470 && y < 520){
       MLV_free_font(font2);
       font2 = MLV_load_font("ressources/polices/police_anc.ttf", 44);
-      MLV_draw_text_with_font(125, 545, "Quitter", font2, MLV_COLOR_ORANGE);
+      MLV_draw_text_with_font(135, 465, "Editor", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
         clic = 1;
-        choix = 8;
+        choix = Editor;
       }
     }
 
-    if(x > 90 && x < 300 && y > 630 && y < 680){
+    if(x > 150 && x < 250 && y > 550 && y < 600){
       MLV_free_font(font2);
-      font2 = MLV_load_font("ressources/polices/police_anc.ttf", 43);
-      MLV_draw_text_with_font(85, 625, "Leaderboard", font2, MLV_COLOR_ORANGE);
+      font2 = MLV_load_font("ressources/polices/police_anc.ttf", 45);
+      MLV_draw_text_with_font(143, 545, "Load", font2, MLV_COLOR_ORANGE);
       if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
         clic = 1;
-        choix = 9;
+        choix = Load;
+      }
+    }
+
+    if(x > 130 && x < 270 && y > 630 && y < 680){
+      MLV_free_font(font2);
+      font2 = MLV_load_font("ressources/polices/police_anc.ttf", 44);
+      MLV_draw_text_with_font(125, 625, "Quitter", font2, MLV_COLOR_ORANGE);
+      if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
+        clic = 1;
+        choix = Quit;
+      }
+    }
+
+    if(x > 90 && x < 300 && y > 710 && y < 750){
+      MLV_free_font(font2);
+      font2 = MLV_load_font("ressources/polices/police_anc.ttf", 43);
+      MLV_draw_text_with_font(85, 705, "Leaderboard", font2, MLV_COLOR_ORANGE);
+      if( MLV_get_mouse_button_state( MLV_BUTTON_LEFT ) == MLV_PRESSED ){
+        clic = 1;
+        choix = Leaderboard;
       }
     }
     if(clic != 1){
