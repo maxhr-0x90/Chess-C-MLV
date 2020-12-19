@@ -16,7 +16,7 @@ void make_grid(){
 /* Fonction ayant pour but de placer les pièces de manière graphique sur le plateau.*/
 void color_piece(Piece *board[][8]){
   int i, j;
-	char path[25];
+	char path[30];
 	char *folder = "ressources/pieces/";
 	char *ext = ".png";
 	char color[][2] = {"B", "N"};
