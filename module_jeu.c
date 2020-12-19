@@ -5,7 +5,7 @@
 int jeu(int choix, int *scores){
   Piece set_piece[64];
   Coord pos, target;
-  int i, mat, moves[9], morts_w[32], morts_b[32];
+  int i, mat, moves[9], morts_w[64], morts_b[64];
   Config jeu;
   MLV_Sound* move_sound;
   MLV_Music *music1;
@@ -15,6 +15,13 @@ int jeu(int choix, int *scores){
   set_clock(&clock_white);
   set_clock(&clock_black);
   update_time(&clock_white, &clock_black, clock_init);
+
+  if(choix == 8){
+    editor(jeu.echiquier, set_piece);
+    jeu.jActuel = Blanc;
+    morts_b[0] = 0;
+    morts_w[0] = 0;
+  }
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*10);
   MLV_init_audio();

@@ -21,7 +21,6 @@ void placer_pieces(Piece *board[][8], Piece pieces[32]){
 	int i;
 	for(i = 0; i < 32; i++){
 		pieces[i].nbMouv = 0;
-		pieces[i].estVivant.val = TRUE;
 
 		if(i < 16){
 			pieces[i].couleur = Noir;

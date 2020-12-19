@@ -28,7 +28,6 @@ void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *
         fputc(board[i][j]->rang, save);
         fputc(board[i][j]->couleur, save);
         fputc(board[i][j]->nbMouv, save);
-        fputc(board[i][j]->estVivant.val, save);
         fputc(board[i][j]->move.droit.val, save);
         fputc(board[i][j]->move.diagonal.val, save);
         fputc(board[i][j]->move.formeL.val, save);
@@ -73,14 +72,14 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, i
     pieces[i].rang = fgetc(save);
     pieces[i].couleur = fgetc(save);
     pieces[i].nbMouv = fgetc(save);
-    pieces[i].estVivant.val = fgetc(save);
     pieces[i].move.droit.val = fgetc(save);
     pieces[i].move.diagonal.val = fgetc(save);
     pieces[i].move.formeL.val = fgetc(save);
     pieces[i].move.limitation = fgetc(save);
     pieces[i].move.ajustement[0] = fgetc(save);
-    if(pieces[i].move.ajustement[0])
+    if(pieces[i].move.ajustement[0]){
       pieces[i].move.ajustement[1] = fgetc(save);
+    }
     board[x][y] = &pieces[i];
   }
   morts_w[0] = fgetc(save);
