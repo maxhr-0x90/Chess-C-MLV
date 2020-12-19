@@ -5,8 +5,8 @@
 void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b){
   int i, j, x;
   FILE* save = NULL;
-  char save_name[6];
-  sprintf(save_name, "save%d", save_state);
+  char save_name[12];
+  sprintf(save_name, "saves/save%d", save_state);
   remove(save_name);
   save = fopen(save_name, "a+");
 
@@ -57,8 +57,8 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, i
   int i, j, x, y;
   Joueur jActuel;
   FILE* save = NULL;
-  char save_name[6];
-  sprintf(save_name, "save%d", save_state);
+  char save_name[12];
+  sprintf(save_name, "saves/save%d", save_state);
   save = fopen(save_name, "r+");
 
   jActuel = fgetc(save);

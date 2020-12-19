@@ -1,13 +1,14 @@
 #include "assets.h"
 
-/*------Fonction de déroulement d'une partie'------*/
+/*------Fonction de déroulement d'une partie------*/
 
 int jeu(int choix, int *scores){
-  Piece set_piece[32];
+  Piece set_piece[64];
   Coord pos, target;
   int i, mat, moves[9], morts_w[32], morts_b[32];
   Config jeu;
   MLV_Sound* move_sound;
+  MLV_Music *music1;
   montre clock_init, clock_white, clock_black;
 
   set_local_time(&clock_init);
@@ -18,6 +19,7 @@ int jeu(int choix, int *scores){
   MLV_create_window("jeu", "jeu", CASE*8, CASE*10);
   MLV_init_audio();
   move_sound = MLV_load_sound("ressources/OST/move.wav");
+  music1 = MLV_load_music("ressources/OST/balade1.mp3");
   mat = FALSE;
 
   if(choix == 0){
@@ -34,6 +36,7 @@ int jeu(int choix, int *scores){
   draw_timer(&clock_white, Blanc);
   draw_timer(&clock_white, Noir);
   affichage_save();
+  MLV_play_music(music1, 0.6, 1);
   while(!mat){
     pos.x = -1;
     while(pos.x == -1){
@@ -91,8 +94,8 @@ int jeu(int choix, int *scores){
     scores[0] = score(jeu.echiquier, Blanc)+200;
     scores[1] = score(jeu.echiquier, Noir);
   }
-  MLV_play_sound(move_sound, 0.5);
   MLV_free_sound(move_sound);
+  MLV_free_music(music1);
   MLV_free_audio();
   MLV_free_window();
 

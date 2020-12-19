@@ -21,6 +21,9 @@ int main(){
         break;
     }
     choix = menu();
-  }
-  exit(0);
+  }/*
+  Piece *board[8][8];
+  Piece set[64];
+  editor(board, set);
+  */exit(0);
 }
