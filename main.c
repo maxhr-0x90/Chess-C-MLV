@@ -24,6 +24,6 @@ int main(){
   }/*
   Piece *board[8][8];
   Piece set[64];
-  editor(board, set);penis
+  editor(board, set);
   */exit(0);
 }
