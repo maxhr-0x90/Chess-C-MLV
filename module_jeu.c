@@ -11,17 +11,17 @@ int jeu(int choix, int *scores){
   MLV_Music *music1;
   montre clock_init, clock_white, clock_black;
 
-  set_local_time(&clock_init);
-  set_clock(&clock_white);
-  set_clock(&clock_black);
-  update_time(&clock_white, &clock_black, clock_init);
-
   if(choix == 8){
     editor(jeu.echiquier, set_piece);
     jeu.jActuel = Blanc;
     morts_b[0] = 0;
     morts_w[0] = 0;
   }
+  
+  set_local_time(&clock_init);
+  set_clock(&clock_white);
+  set_clock(&clock_black);
+  update_time(&clock_white, &clock_black, clock_init);
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*10);
   MLV_init_audio();
