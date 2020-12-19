@@ -11,7 +11,7 @@
 
 /*-------------------Définitions de types------------------------*/
 
-typedef enum{Blanc, Noir} Joueur;
+typedef enum{Blanc, Noir, Nulle} Joueur;
 typedef enum{Roi, Reine, Tour, Fou, Cavalier, Pion} TypePiece;
 
 typedef struct
@@ -142,3 +142,7 @@ void reinject_clock(montre *clock, int sec);
 void set_local_time(montre *clock);
 void update_time(montre *clock1, montre *clock2, montre clock_init);
 void set_clock(montre *clock);
+
+/*-------------------Module de choix de plateau----------------------*/
+
+void editor(Piece *board[][8], Piece *set_pieces);
