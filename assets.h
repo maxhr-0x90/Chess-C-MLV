@@ -84,7 +84,7 @@ void moves_legaux(Piece *board[][8], Coord pos, int *moves);
 int est_legal(Piece *board[][8], Coord pos, Coord target, int *moves);
 int zero_moves(Piece *board[][8], Joueur color);
 int est_echec_et_mat(Piece *board[][8], Joueur color);
-int pat(Piece *board[][8], Joueur color);
+int est_pat(Piece *board[][8], Joueur color);
 int seulement_rois(Piece *board[][8]);
 void pion_ligne_finale(Piece *board[][8], Coord xy);
 void maj_board(Piece *board[][8], Coord old, Coord new);
@@ -135,9 +135,8 @@ int jeu(int choix, int *scores);
 void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b);
 Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b);
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2);
-int score(Piece *board[][8], Joueur color);
-void lecture_leaderboard(JLeaderboard Leaderboard[10]);
-void tri_leaderboard(int scores[2]);
+int lecture_leaderboard(JLeaderboard Leaderboard[10]);
+void update_leaderboard(int scores[2]);
 
 /*------------------------Module du timer----------------------------*/
 

@@ -5,7 +5,7 @@
 int jeu(int choix, int *scores){
   Piece set_piece[64];
   Coord pos, target;
-  int i, mat, moves[9], morts_w[64], morts_b[64];
+  int i, mat, pat, moves[9], morts_w[64], morts_b[64];
   Config jeu;
   MLV_Sound* move_sound;
   MLV_Music *music1;
@@ -17,7 +17,7 @@ int jeu(int choix, int *scores){
     morts_b[0] = 0;
     morts_w[0] = 0;
   }
-  
+
   set_local_time(&clock_init);
   set_clock(&clock_white);
   set_clock(&clock_black);
@@ -28,6 +28,7 @@ int jeu(int choix, int *scores){
   move_sound = MLV_load_sound("ressources/OST/move.wav");
   music1 = MLV_load_music("ressources/OST/balade1.mp3");
   mat = FALSE;
+  pat = FALSE;
 
   if(choix == 0){
     init_plateau(jeu.echiquier, set_piece);
@@ -44,7 +45,7 @@ int jeu(int choix, int *scores){
   draw_timer(&clock_white, Noir);
   affichage_save();
   MLV_play_music(music1, 0.6, 1);
-  while(!mat){
+  while(!mat && !pat){
     pos.x = -1;
     while(pos.x == -1){
       if(jeu.jActuel){
@@ -91,20 +92,26 @@ int jeu(int choix, int *scores){
       actualise_morts(morts_w, morts_b);
     }
     mat = est_echec_et_mat(jeu.echiquier, jeu.jActuel);
+    pat = est_pat(jeu.echiquier, jeu.jActuel) || seulement_rois(jeu.echiquier);
   }
 
   if(!jeu.jActuel){
-    scores[0] = score(jeu.echiquier, Blanc);
-    scores[1] = score(jeu.echiquier, Noir)+200;
+    scores[0] = -50;
+    scores[1] = 200;
   }
   else{
-    scores[0] = score(jeu.echiquier, Blanc)+200;
-    scores[1] = score(jeu.echiquier, Noir);
+    scores[0] = 200;
+    scores[1] = -50;
   }
+
   MLV_free_sound(move_sound);
   MLV_free_music(music1);
   MLV_free_audio();
   MLV_free_window();
 
-  return jeu.jActuel;
+  if(mat){
+    return jeu.jActuel;
+  } else {
+    return 2;
+  }
 }

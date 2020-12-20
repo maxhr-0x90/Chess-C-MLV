@@ -168,12 +168,12 @@ void screen_fin_partie(Joueur color){
     MLV_create_window("fin", "fin", 400, 100);
 
     font = MLV_load_font("ressources/polices/police_anc.ttf", 40);
-    if(color){
-      MLV_draw_text_with_font(33, 30, "Les Blancs gagnent", font, MLV_COLOR_RED2);
+    switch (color){
+      case 0: MLV_draw_text_with_font(35, 30, "Les Noirs gagnent", font, MLV_COLOR_RED2); break;
+      case 1: MLV_draw_text_with_font(33, 30, "Les Blancs gagnent", font, MLV_COLOR_RED2); break;
+      case 2: MLV_draw_text_with_font(30, 30, "Aucun coup légal, pat", font, MLV_COLOR_RED2); break;
     }
-    else{
-      MLV_draw_text_with_font(35, 30, "Les Noirs gagnent", font, MLV_COLOR_RED2);
-    }
+
     MLV_actualise_window();
     MLV_wait_seconds(3);
     MLV_free_font(font);
@@ -200,12 +200,12 @@ void aff_leaderboard(){
   MLV_create_window("Leaderboard", "Leaderboard", 400, 800);
 
   font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 30);
-  do{
+  while(i < 10 && Lead[i].score != -1){
     MLV_draw_text_with_font(10, 20+50*i, Lead[i].pseudo, font, MLV_COLOR_RED);
     sprintf(score, "%d", Lead[i].score);
-    MLV_draw_text_with_font(200, 20+50*i, score, font, MLV_COLOR_RED);
+    MLV_draw_text_with_font(300, 20+50*i, score, font, MLV_COLOR_RED);
     i++;
-  }while(Lead[i].score != -1 && i != 10);
+  }
   MLV_actualise_window();
   MLV_free_font(font);
   MLV_wait_mouse(NULL, NULL);
@@ -348,12 +348,12 @@ void draw_timer(montre *clock, Joueur jActuel){
    font = MLV_load_font("ressources/polices/police_anc.ttf", CASE/2);
    sprintf(montre, "%d:%02d:%02d", clock->h, clock->m, clock->s);
    if(jActuel){
-     MLV_draw_filled_rectangle(CASE*6, CASE*8.2, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
-     MLV_draw_text_with_font(6*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+     MLV_draw_filled_rectangle(CASE*6, CASE*8, CASE*2, CASE*0.7, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(6*CASE, 8*CASE, montre, font, MLV_COLOR_RED);
    }
    else{
-     MLV_draw_filled_rectangle(CASE*4, CASE*8.2, CASE*2, CASE*0.72, MLV_COLOR_BLACK);
-     MLV_draw_text_with_font(4*CASE, 8.2*CASE, montre, font, MLV_COLOR_RED);
+     MLV_draw_filled_rectangle(CASE*4, CASE*8, CASE*2, CASE*0.7, MLV_COLOR_BLACK);
+     MLV_draw_text_with_font(4*CASE, 8*CASE, montre, font, MLV_COLOR_RED);
    }
    MLV_actualise_window();
    MLV_free_font(font);

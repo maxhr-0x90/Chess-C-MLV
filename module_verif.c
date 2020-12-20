@@ -637,7 +637,7 @@ int est_echec_et_mat(Piece *board[][8], Joueur color){
   return result;
 }
 
-int pat(Piece *board[][8], Joueur color){
+int est_pat(Piece *board[][8], Joueur color){
   int result;
 
   result = zero_moves(board, color);
@@ -666,7 +666,7 @@ void pion_ligne_finale(Piece *board[][8], Coord xy){
   int x = xy.x, y = xy.y, choix = 0;
 
   if(board[y][x]->rang == Pion){
-    if(board[y][x]->couleur == Noir && y == 0){
+    if(board[y][x]->couleur == Noir && y == 7){
       choix = choix_piece_pion(board[y][x]->couleur);
     }
     if(board[y][x]->couleur == Blanc && y == 0){

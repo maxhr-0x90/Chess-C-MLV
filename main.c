@@ -1,23 +1,32 @@
 #include "assets.h"
 
 int main(){
-  int scores[2];
+  int scores[2], endgame;
   ChoixMenu choix;
 
   choix = menu();
   while (choix != Quit){
     switch(choix){
       case Play:
-        screen_fin_partie(jeu(0, scores));
-        tri_leaderboard(scores);
+        endgame = jeu(0, scores);
+        screen_fin_partie(endgame);
+        if (endgame != 2) {
+          update_leaderboard(scores);
+        }
         break;
       case Load:
-        screen_fin_partie(jeu(save_state(), scores));
-        tri_leaderboard(scores);
+        endgame = jeu(save_state(), scores);
+        screen_fin_partie(endgame);
+        if (endgame != 2) {
+          update_leaderboard(scores);
+        }
         break;
       case Editor:
-        screen_fin_partie(jeu(8, scores));
-        tri_leaderboard(scores);
+        endgame = jeu(8, scores);
+        screen_fin_partie(endgame);
+        if (endgame != 2) {
+          update_leaderboard(scores);
+        }
         break;
       case Leaderboard:
         aff_leaderboard();
@@ -26,6 +35,8 @@ int main(){
         break;
     }
     choix = menu();
-  }
+  }/*
+  JLeaderboard lb[10];
+  lecture_leaderboard(lb);*/
   exit(0);
 }

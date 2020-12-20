@@ -59,9 +59,6 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
   int i = 0, x = pos.x/CASE, y = pos.y/CASE, assign = 0;
 
   if(pos.y < CASE*8 && choix != 13){
-    while(set_pieces[i].couleur != Nulle){
-      i++;
-    }
     if(presence_roi(board, Jmodif) != 1){
       nvPiece.rang = choix%6;
       nvPiece.couleur = Jmodif;
@@ -69,13 +66,12 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
     }
     else{
       if(choix%6 != 0){
-        if(board[y][x] == NULL){
-          nvPiece.rang = choix%6;
-          nvPiece.couleur = Jmodif;
-          assign = 1;
-        }
+        nvPiece.rang = choix%6;
+        nvPiece.couleur = Jmodif;
+        assign = 1;
       }
     }
+
     if(assign){
       switch(nvPiece.rang){
         case Roi:
@@ -97,12 +93,20 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
           deplace_pion(&nvPiece);
           break;
       }
-      set_pieces[i] = nvPiece;
-      board[y][x] = &set_pieces[i];
+      if(board[y][x] != NULL){
+        board[y][x]->rang = nvPiece.rang;
+        board[y][x]->couleur = nvPiece.couleur;
+      } else {
+        while(set_pieces[i].couleur != Nulle){
+          i++;
+        }
+        set_pieces[i] = nvPiece;
+        board[y][x] = &set_pieces[i];
+      }
     }
   }
   else{
-    if(pos.y < CASE*8){
+    if(y < 8){
       if(board[y][x] != NULL){
         board[y][x]->couleur = Nulle;
         board[y][x] = NULL;
@@ -136,7 +140,7 @@ void editor(Piece *board[][8], Piece *set_pieces){
   while(!sortie){
     pos = editor_clic();
     piece_choisie = analyse_editor_clic_1(pos, piece_choisie);
-    printf("%d\n", piece_choisie);
+
     if(piece_choisie < 14){
       analyse_editor_clic_2(board, set_pieces, pos, piece_choisie);
       dessiner_pieces(piece_choisie);

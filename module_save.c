@@ -96,30 +96,11 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, i
 
 /*------Fonction lisant un fichier texte et le mettant dans une string------*/
 
-void lecture_fic_lead(char *str){
-  char c;
-  int i = 0;
-  FILE* lb = NULL;
-
-  lb = fopen("leaderboard", "r+");
-
-  if (lb == NULL){
-    printf("Impossible, rien à analyser\n");
-    exit(-1);
-  }
-
-  do {
-    c = fgetc(lb);
-    str[i] = c;
-    i++;
-  } while(c != EOF);
-  str[i] = '\0';
-  fclose(lb);
-}
 
 /*------Fonction d'input pour les pseudos a la fin du jeu------*/
 
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
+  int i = 0;
   char* text1;
   char* text2;
   MLV_Font *font;
@@ -131,142 +112,146 @@ void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
   MLV_wait_input_box_with_font(10, 50, 800, 90, MLV_COLOR_BLACK, MLV_COLOR_RED, MLV_COLOR_BLACK, "Player 1 (Les Blancs): ", &text1, font);
   MLV_wait_input_box_with_font(10, 50, 800, 90, MLV_COLOR_BLACK, MLV_COLOR_RED, MLV_COLOR_BLACK, "Player 2 (Les Noirs): ", &text2, font);
 
+  while(text1[i] != '\0'){
+    if(text1[i] == ' '){
+      text1[i] = '_';
+    }
+    i++;
+  }
+
+  i = 0;
+  while(text2[i] != '\0'){
+    if(text2[i] == ' '){
+      text2[i] = '_';
+    }
+    i++;
+  }
+
   sprintf(j1->pseudo, "%s", text1);
   sprintf(j2->pseudo, "%s", text2);
-
   MLV_free_window();
 }
 
 
 /*------Fonction d'input pour les pseudos a la fin du jeu------*/
 
-void lecture_leaderboard(JLeaderboard Leaderboard[10]){
-  int i, j, k, champ;
-  char dump[500], lead[1000];
-  lecture_fic_lead(lead);
+int lecture_leaderboard(JLeaderboard Leaderboard[10]){
+  char chaine[1000];
+  FILE *lb = NULL;
+  int i, n;
+  lb = fopen("leaderboard", "r");
+  fscanf(lb, "%s", chaine);
+  n = atoi(chaine);
 
-  i = 0;
-  k = 0;
-  champ = 0;
-  while(lead[k+1] != '\0'){
-    if(champ == 0){
-      j = 0;
-      while(lead[k] != '|' && lead[k] != EOF){
-        dump[j] = lead[k];
-        j++;
-        k++;
-        champ = 1;
-      }
-      Leaderboard[i].score = (int)strtol(dump, NULL, 10);
-      k++;
-      dump[0] = '\0';
-    }
-    if(champ == 1 && lead[k+3] != '\0'){
-      j = 0;
-      do{
-        Leaderboard[i].pseudo[j] = lead[k];
-        j++;
-        k++;
-        champ = 0;
-      }while(lead[k] != '|' && lead[k+1] != '\0' && lead[k] != '\n');
-      k++;
-
-    }
-    i++;
+  for(i = 0; i < n; i++){
+    fscanf(lb, "%s", chaine);
+    Leaderboard[i].score = atoi(chaine);
+    fscanf(lb, "%s", Leaderboard[i].pseudo);
   }
-  for(j = i; j < 10; j++){
+
+  for(i = n; i < 10; i++){
     Leaderboard[i].score = -1;
   }
-}
-
-void tri_leaderboard(int scores[2]){
-  int i, j;
-  JLeaderboard j1, j2, Lead[10];
-  FILE *lb = NULL;
-  lect_pseudos(&j1, &j2);
-  lecture_leaderboard(Lead);
-
-  j1.score = scores[0];
-  j2.score = scores[1];
-
-  i = 0;
-  while(j1.score < Lead[i].score && i < 10){
-    i++;
-  }
-  if(i != 10 && !strcmp(Lead[i].pseudo, j1.pseudo)){
-    Lead[i].score += j1.score;
-  }
-  else{
-    if(i != 10){
-      for(j = 9; j > i; j--){
-        Lead[j] = Lead[j-1];
-      }
-      Lead[j] = j1;
-    }
-  }
-
-  i = 0;
-  while(j2.score < Lead[i].score && i < 10){
-    i++;
-  }
-  if(i != 10 && !strcmp(Lead[i].pseudo, j2.pseudo)){
-    Lead[i].score += j2.score;
-  }
-  else{
-    if(i != 10){
-      for(j = 9; j > i; j--){
-        Lead[j] = Lead[j-1];
-      }
-      Lead[j] = j2;
-    }
-  }
-
-  i = 0;
-
-  remove("leaderboard");
-  lb = fopen("leaderboard", "a+");
-  if (lb == NULL){
-    printf("Impossible, rien à analyser\n");
-    exit(-1);
-  }
-  while(Lead[i].score != -1 && i != 10){
-    fprintf(lb, "%d|", Lead[i].score);
-    fprintf(lb, "%s|", Lead[i].pseudo);
-    i++;
-  }
   fclose(lb);
+  return n;
 }
 
+int update_place(JLeaderboard *lb, int index){
+  JLeaderboard temp;
 
-/*------Fonction calculant le score des joueurs------*/
+  while(index != 0 && lb[index].score > lb[index-1].score){
+    temp = lb[index-1];
+    lb[index-1] = lb[index];
+    lb[index] = temp;
+    index--;
+  }
 
-int score(Piece *board[][8], Joueur color){
-  int i, j, score;
-  score = 39;
-  for(i = 0; i < 8; i++){
-    for(j = 0; j < 8; j++){
-      if(board[i][j] != NULL && board[i][j]->couleur == color && board[i][j]->rang != Roi){
-        switch(board[i][j]->rang){
-          case Reine:
-            score -= 9;
-            break;
-          case Tour:
-            score -= 5;
-            break;
-          case Fou:
-            score -= 3;
-            break;
-          case Cavalier:
-            score -= 3;
-            break;
-          case Pion:
-            score -= 1;
-            break;
-          default:
-            break;
+  while(index != 9 && lb[index].score < lb[index+1].score){
+    temp = lb[index+1];
+    lb[index+1] = lb[index];
+    lb[index] = temp;
+    index++;
+  }
+  if(lb[index].score <= 0){
+    lb[index].score = -1;
+    lb[index].pseudo[0] = '\0';
+    return 1;
+  }
+  return 0;
+}
+
+void update_leaderboard(int scores[2]){
+  JLeaderboard lb[10], j1, j2;
+  int i = 0, j, nombre_joueur;
+  FILE *leaderboard = NULL;
+
+  nombre_joueur = lecture_leaderboard(lb);
+  lect_pseudos(&j1, &j2);
+
+  /*J1 Blancs*/
+
+  while(i < 10 && lb[i].score != -1 && strcmp(lb[i].pseudo, j1.pseudo) && lb[i].score >= scores[0]){
+    i++;
+  }
+  if(i != 10){
+    if(!strcmp(lb[i].pseudo, j1.pseudo)){
+      lb[i].score += scores[0];
+      nombre_joueur -= update_place(lb, i);
+    }
+    else if(scores[0] > 0){
+      if(lb[i].score != -1){
+        for(j = 9; j > i; j--){
+          lb[j] = lb[j-1];
         }
+        j1.score = scores[0];
+        lb[i] = j1;
+      }
+      else{
+        j1.score = scores[0];
+        lb[i] = j1;
+        nombre_joueur++;
       }
     }
   }
-  return score;
+
+  /*J2 Noirs*/
+
+  i = 0;
+  while(i < 10 && lb[i].score != -1 && strcmp(lb[i].pseudo, j2.pseudo) && lb[i].score >= scores[0]){
+    i++;
+  }
+
+  if(i != 10){
+    if(!strcmp(lb[i].pseudo, j2.pseudo)){
+      lb[i].score += scores[1];
+      nombre_joueur -= update_place(lb, i);
+    }
+    else if(scores[1] > 0){
+      if(lb[i].score != -1){
+        for(j = 9; j > i; j--){
+          lb[j] = lb[j-1];
+        }
+        j2.score = scores[1];
+        lb[i] = j2;
+      }
+      else{
+        j2.score = scores[1];
+        lb[i] = j2;
+        nombre_joueur++;
+      }
+    }
+  }
+
+  leaderboard = fopen("leaderboard", "w");
+  if(leaderboard == NULL){
+    fprintf(stderr, "Accès impossible\n");
+    exit(1);
+  }
+  fprintf(leaderboard, "%d\n", nombre_joueur);
+  i = 0;
+  while(i < 10 && lb[i].score > 0){
+    fprintf(leaderboard, "%d\n%s\n", lb[i].score, lb[i].pseudo);
+    i++;
+  }
+  fclose(leaderboard);
 }
