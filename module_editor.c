@@ -96,6 +96,7 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
       if(board[y][x] != NULL){
         board[y][x]->rang = nvPiece.rang;
         board[y][x]->couleur = nvPiece.couleur;
+        board[y][x]->move = nvPiece.move;
       } else {
         while(set_pieces[i].couleur != Nulle){
           i++;
