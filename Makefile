@@ -37,4 +37,4 @@ module_editor.o : module_editor.c assets.h
 	$(CC) $(CFLAGS) $(CGRAPH) -c $(ENDFLAGS) module_editor.c
 
 clean :
-	rm -rf *.o main
+	rm -rf *.o

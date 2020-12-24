@@ -9,6 +9,11 @@ Pour compiler, utilisez la commande:
 ```
 make
 ```
+Une fois compilé si les fichiers objets vous gênent utilisez la commande:
+```
+make clean
+```
+
 Les options de compilation utilisées sont:
 ```
 -W -Wall -std=c89 -pedantic -O3 -g
