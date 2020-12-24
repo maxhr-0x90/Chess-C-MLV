@@ -1,4 +1,4 @@
-# Very Nice Chess
+# Very Good Chess
 ## Description
 Very Good Chess ou VGC est un moteur d'échec basé sur la bibliothèque [graphique MLV](http://www-igm.univ-mlv.fr/~boussica/mlv/api/French/html/index.html).
 Celui-ci permet notament de suivre un déroulrment normal de partie, sauvegarder une
