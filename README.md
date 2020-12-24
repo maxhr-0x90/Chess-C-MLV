@@ -1,8 +1,13 @@
 # Very Nice Chess
 ## Description
-Very Nice Chess ou VNC est un moteur d'échec basé sur la bibliothèque graphique MLV.
+Very Nice Chess ou VNC est un moteur d'échec basé sur la bibliothèque [graphique MLV](http://www-igm.univ-mlv.fr/~boussica/mlv/api/French/html/index.html).
 Celui-ci permet notament de suivre un déroulrment normal de partie, sauvegarder une
 partie en cours et éditer un plateau pour commencer une partie customisée.
+
+## Dépendances
+Le projet étant basé sur la bibliothèque MLV il possède une dépendance à celle-ci.
+Pour l'installer il suffit de suivre les instructions présentes dans le
+[guide d'installation MLV](http://www-igm.univ-mlv.fr/~boussica/mlv/api/French/html/installation.html).
 
 ## Compilation
 Pour compiler, utilisez la commande:
