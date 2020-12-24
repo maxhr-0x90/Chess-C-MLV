@@ -138,15 +138,24 @@ void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
 int lecture_leaderboard(JLeaderboard Leaderboard[10]){
   char chaine[1000];
   FILE *lb = NULL;
-  int i, n;
+  int i, n, readout;
   lb = fopen("leaderboard", "r");
-  fscanf(lb, "%s", chaine);
+  readout = fscanf(lb, "%s", chaine);
+  if (readout == 0){
+    return -1;
+  }
   n = atoi(chaine);
 
   for(i = 0; i < n; i++){
-    fscanf(lb, "%s", chaine);
+    readout = fscanf(lb, "%s", chaine);
+    if (readout == 0){
+      break;
+    }
     Leaderboard[i].score = atoi(chaine);
-    fscanf(lb, "%s", Leaderboard[i].pseudo);
+    readout = fscanf(lb, "%s", Leaderboard[i].pseudo);
+    if (readout == 0){
+      break;
+    }
   }
 
   for(i = n; i < 10; i++){
