@@ -5,7 +5,7 @@
 int jeu(int choix, int *scores){
   Piece set_piece[64];
   Coord pos, target;
-  int i, mat, pat, moves[9], morts_w[64], morts_b[64];
+  int i, mat, pat, moves[9], morts_w[64], morts_b[64], save = 0;
   Config jeu;
   MLV_Sound* move_sound;
   MLV_Music *music1;
@@ -45,14 +45,14 @@ int jeu(int choix, int *scores){
   draw_timer(&clock_white, Noir);
   affichage_save();
   MLV_play_music(music1, 0.6, 1);
-  while(!mat && !pat){
+  while(!mat && !pat && !save){
     pos.x = -1;
     while(pos.x == -1){
       if(jeu.jActuel){
-        pos = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_black, &clock_white, clock_init, morts_w, morts_b);
+        pos = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_black, &clock_white, clock_init, morts_w, morts_b, &save);
       }
       else{
-        pos = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_white, &clock_black, clock_init, morts_w, morts_b);
+        pos = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_white, &clock_black, clock_init, morts_w, morts_b, &save);
       }
     }
     if(est_piece(jeu.echiquier, pos) && jeu.echiquier[pos.y][pos.x]->couleur == jeu.jActuel){
@@ -65,10 +65,10 @@ int jeu(int choix, int *scores){
       target.x = -1;
       while(target.x == -1){
         if(jeu.jActuel){
-          target = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_black, &clock_white, clock_init, morts_w, morts_b);
+          target = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_black, &clock_white, clock_init, morts_w, morts_b, &save);
         }
         else{
-          target = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_white, &clock_black, clock_init, morts_w, morts_b);
+          target = clic_or_save(jeu.echiquier, jeu.jActuel, &clock_white, &clock_black, clock_init, morts_w, morts_b, &save);
         }
       }
       if(est_legal(jeu.echiquier, pos, target, moves)){
@@ -93,6 +93,14 @@ int jeu(int choix, int *scores){
     }
     mat = est_echec_et_mat(jeu.echiquier, jeu.jActuel);
     pat = est_pat(jeu.echiquier, jeu.jActuel) || seulement_rois(jeu.echiquier);
+  }
+
+  if(save){
+    MLV_free_sound(move_sound);
+    MLV_free_music(music1);
+    MLV_free_audio();
+    MLV_free_window();
+    return -1;
   }
 
   if(!jeu.jActuel){

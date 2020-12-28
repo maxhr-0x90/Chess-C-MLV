@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-#define CASE 60
+#define CASE 75
 
 #define TRUE 1
 #define FALSE 0
@@ -95,7 +95,7 @@ void make_grid();
 void color_piece();
 void indic_deplace(Piece *board[][8], Coord pos, int *moves);
 void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
-Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b);
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b, int *Save);
 void screen_fin_partie(Joueur color);
 void affichage_save();
 void aff_leaderboard();

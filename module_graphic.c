@@ -96,7 +96,7 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
 
 /*GESTION DU CLIC*/
 
-Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b){
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b, int *Save){
   Coord map;
   int x, y;
   int save_button = 0;
@@ -133,28 +133,28 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *cl
   switch(save_button){
     case 1:
       save(board, jActuel, 1, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     case 2:
       save(board, jActuel, 2, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     case 3:
       save(board, jActuel, 3, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     case 4:
       save(board, jActuel, 4, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     case 5:
       save(board, jActuel, 5, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     case 6:
       save(board, jActuel, 6, morts_w, morts_b);
-      exit(0);
-      break;
+      Save[0] = 1;
+      return map;
     default:
       break;
   }
@@ -164,20 +164,20 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *cl
 /*------Fonction affichant l'écran de fin de partie------*/
 
 void screen_fin_partie(Joueur color){
-    MLV_Font *font;
-    MLV_create_window("fin", "fin", 400, 100);
+  MLV_Font *font;
+  MLV_create_window("fin", "fin", 400, 100);
 
-    font = MLV_load_font("ressources/polices/police_anc.ttf", 40);
-    switch (color){
-      case 0: MLV_draw_text_with_font(35, 30, "Les Noirs gagnent", font, MLV_COLOR_RED2); break;
-      case 1: MLV_draw_text_with_font(33, 30, "Les Blancs gagnent", font, MLV_COLOR_RED2); break;
-      case 2: MLV_draw_text_with_font(30, 30, "Aucun coup légal, pat", font, MLV_COLOR_RED2); break;
-    }
+  font = MLV_load_font("ressources/polices/police_anc.ttf", 40);
+  switch (color){
+    case 0: MLV_draw_text_with_font(35, 30, "Les Noirs gagnent", font, MLV_COLOR_RED2); break;
+    case 1: MLV_draw_text_with_font(33, 30, "Les Blancs gagnent", font, MLV_COLOR_RED2); break;
+    case 2: MLV_draw_text_with_font(30, 30, "Aucun coup légal, pat", font, MLV_COLOR_RED2); break;
+  }
 
-    MLV_actualise_window();
-    MLV_wait_seconds(3);
-    MLV_free_font(font);
-    MLV_free_window();
+  MLV_actualise_window();
+  MLV_wait_seconds(3);
+  MLV_free_font(font);
+  MLV_free_window();
 }
 
 /*------Fonction affichant le texte rappellant au joueur qu'il peut sauvegarder------*/

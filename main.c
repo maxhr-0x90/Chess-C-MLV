@@ -9,23 +9,29 @@ int main(){
     switch(choix){
       case Play:
         endgame = jeu(0, scores);
-        screen_fin_partie(endgame);
-        if (endgame != 2) {
-          update_leaderboard(scores);
+        if(endgame != -1){
+          screen_fin_partie(endgame);
+          if (endgame != 2) {
+            update_leaderboard(scores);
+          }
         }
         break;
       case Load:
         endgame = jeu(save_state(), scores);
         screen_fin_partie(endgame);
-        if (endgame != 2) {
-          update_leaderboard(scores);
+        if(endgame != -1){
+          if (endgame != 2) {
+            update_leaderboard(scores);
+          }
         }
         break;
       case Editor:
         endgame = jeu(8, scores);
-        screen_fin_partie(endgame);
-        if (endgame != 2) {
-          update_leaderboard(scores);
+        if(endgame != -1){
+          screen_fin_partie(endgame);
+          if (endgame != 2) {
+            update_leaderboard(scores);
+          }
         }
         break;
       case Leaderboard:
@@ -35,8 +41,6 @@ int main(){
         break;
     }
     choix = menu();
-  }/*
-  JLeaderboard lb[10];
-  lecture_leaderboard(lb);*/
+  }
   exit(0);
 }
