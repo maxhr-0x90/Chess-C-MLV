@@ -322,6 +322,7 @@ int est_mortel(Piece *board[][8], Coord pos, Joueur color){
   int i, j, x, moves[8];
   Coord enemy;
 
+  /*Pour chaque pièce de l'échiquier, on vérifie si elle peut atteindre la case décrite par pos*/
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
       if(board[i][j] != NULL && color !=board[i][j]->couleur){
@@ -616,6 +617,7 @@ int zero_moves(Piece *board[][8], Joueur color){
       pos.y = i;
       if(board[i][j] != NULL && color == board[i][j]->couleur){
 
+        /*Vérification qu'aucun mouvements n'est possible*/
         moves_legaux(board, pos, move);
         for(k = 0; k < 8; k++){
           if(move[k] != 0){
@@ -665,7 +667,10 @@ int seulement_rois(Piece *board[][8]){
 void pion_ligne_finale(Piece *board[][8], Coord xy){
   int x = xy.x, y = xy.y, choix = 0;
 
+  /*vérification que la pièce est un pion*/
   if(board[y][x]->rang == Pion){
+
+    /*vérification de la position du pion sur la denirère ligne en fonction de sa couleur*/
     if(board[y][x]->couleur == Noir && y == 7){
       choix = choix_piece_pion(board[y][x]->couleur);
     }
@@ -673,7 +678,9 @@ void pion_ligne_finale(Piece *board[][8], Coord xy){
       choix = choix_piece_pion(board[y][x]->couleur);
     }
   }
+
   if(choix != 0){
+    /*on initialise la pièce en fonction du choix du joueur (C.F. la fonction choix_piece_pion)*/
     board[y][x]->rang = choix;
     if(board[y][x]->rang == Reine){
       deplace_reine(board[y][x]);

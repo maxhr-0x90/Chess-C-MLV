@@ -146,6 +146,7 @@ void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
   MLV_wait_input_box_with_font(10, 50, 800, 90, MLV_COLOR_BLACK, MLV_COLOR_RED, MLV_COLOR_BLACK, "Player 1 (Les Blancs): ", &text1, font);
   MLV_wait_input_box_with_font(10, 50, 800, 90, MLV_COLOR_BLACK, MLV_COLOR_RED, MLV_COLOR_BLACK, "Player 2 (Les Noirs): ", &text2, font);
 
+  /*On remplace les potentiels espaces avec des '_' dans les deux textes*/
   while(text1[i] != '\0'){
     if(text1[i] == ' '){
       text1[i] = '_';
@@ -161,13 +162,13 @@ void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2){
     i++;
   }
 
+  /*On écrit dans les struct les textes*/
   sprintf(j1->pseudo, "%s", text1);
   sprintf(j2->pseudo, "%s", text2);
   MLV_free_window();
 }
 
 
-/*------Fonction d'input pour les pseudos a la fin du jeu------*/
 
 int lecture_leaderboard(JLeaderboard Leaderboard[10]){
   char chaine[1000];
@@ -180,6 +181,7 @@ int lecture_leaderboard(JLeaderboard Leaderboard[10]){
   }
   n = atoi(chaine);
 
+  /*Récupération des scores et des pseudos*/
   for(i = 0; i < n; i++){
     readout = fscanf(lb, "%s", chaine);
     if (readout == 0){
@@ -199,9 +201,11 @@ int lecture_leaderboard(JLeaderboard Leaderboard[10]){
   return n;
 }
 
+/*Met à jour la place du joueur situé à la place index dans le classement*/
 int update_place(JLeaderboard *lb, int index){
   JLeaderboard temp;
 
+  /*Cas où le joueur ne serait pas premier et que sont score est supérieur à celui du dessus*/
   while(index != 0 && lb[index].score > lb[index-1].score){
     temp = lb[index-1];
     lb[index-1] = lb[index];
@@ -209,12 +213,15 @@ int update_place(JLeaderboard *lb, int index){
     index--;
   }
 
+  /*Cas où le joueur ne serait pas dernier et que sont score est inférieur à celui du dessous*/
   while(index != 9 && lb[index].score < lb[index+1].score){
     temp = lb[index+1];
     lb[index+1] = lb[index];
     lb[index] = temp;
     index++;
   }
+
+  /*Cas où le joueur possède un score nul ou négatif*/
   if(lb[index].score <= 0){
     lb[index].score = -1;
     lb[index].pseudo[0] = '\0';

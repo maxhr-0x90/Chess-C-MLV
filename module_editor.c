@@ -18,7 +18,7 @@ int presence_roi(Piece *board[][8], Joueur color){
   return nb_roi;
 }
 
-int analyse_editor_clic_1(Coord pos, int act_choix){
+int analyse_choix(Coord pos, int act_choix){
   int x = pos.x, y = pos.y, piece_choisie;
   if(CASE*8.6 < y && y < CASE*9.5 && 0 < x && x < CASE){
     return 14;
@@ -53,7 +53,7 @@ int analyse_editor_clic_1(Coord pos, int act_choix){
   return act_choix;
 }
 
-void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int choix){
+void analyse_clic_plateau(Piece *board[][8], Piece *set_pieces, Coord pos, int choix){
   Joueur Jmodif = choix < 6;
   Piece nvPiece;
   int i = 0, x = pos.x/CASE, y = pos.y/CASE, assign = 0;
@@ -72,6 +72,7 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
       }
     }
 
+    /*initialise la pièce dans le plateau si toutefois le joueur à choisi une pièce (en fonction de ton rang)*/
     if(assign){
       switch(nvPiece.rang){
         case Roi:
@@ -116,6 +117,7 @@ void analyse_editor_clic_2(Piece *board[][8], Piece *set_pieces, Coord pos, int 
   }
 }
 
+/*Fonction principale du mode editor*/
 void editor(Piece *board[][8], Piece *set_pieces){
   int i, piece_choisie = 0, sortie = 0;
   Piece nul;
@@ -127,10 +129,13 @@ void editor(Piece *board[][8], Piece *set_pieces){
     set_pieces[i] = nul;
   }
   MLV_create_window("editor_mod", "editor_mod", CASE*8, CASE*10.5);
+
   font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 20);
   MLV_draw_text_with_font(CASE*1.4, CASE*10, "To save and play, click on OK", font, MLV_COLOR_RED);
+
   font = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 40);
   MLV_draw_text_with_font(CASE*0.1, CASE*8.6, "OK", font, MLV_COLOR_GREEN);
+  
   MLV_free_font(font);
 
   dessiner_pieces(piece_choisie);
@@ -140,10 +145,10 @@ void editor(Piece *board[][8], Piece *set_pieces){
 
   while(!sortie){
     pos = editor_clic();
-    piece_choisie = analyse_editor_clic_1(pos, piece_choisie);
+    piece_choisie = analyse_choix(pos, piece_choisie);
 
     if(piece_choisie < 14){
-      analyse_editor_clic_2(board, set_pieces, pos, piece_choisie);
+      analyse_clic_plateau(board, set_pieces, pos, piece_choisie);
       dessiner_pieces(piece_choisie);
       make_grid();
       color_piece(board);

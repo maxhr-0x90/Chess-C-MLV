@@ -102,13 +102,19 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, Montre *clock1, Montre *cl
   int save_button = 0;
   x = -1;
   y = -1;
+  /*Par défaut les coordonnées sont -1 et -1 pour correspondre a la boucle while de la fonction jeu qui permet un clic fluide et non statique durant le jeu*/
   map.x = x;
   map.y = y;
 
+  /*On attend que l'utilisateur clique ou sauvegarde*/
   while(MLV_get_mouse_button_state(MLV_BUTTON_LEFT) != MLV_PRESSED && save_button == 0){
+
+    /*On saisis la position de la souris en temps réel*/
     MLV_get_mouse_position(&map.x, &map.y);
     map.x /= CASE;
     map.y /= CASE;
+
+    /*Si un des boutons de save est enfoncé alors la variable save_button vaut la valeur de la save_state choisie*/
     if(MLV_get_keyboard_state(MLV_KEYBOARD_AMPERSAND) == MLV_PRESSED){
       save_button = 1;
     }
@@ -127,9 +133,13 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, Montre *clock1, Montre *cl
     if(MLV_get_keyboard_state(MLV_KEYBOARD_MINUS) == MLV_PRESSED){
       save_button = 6;
     }
+
+    /*On met à jour le timer puis on l'affiche*/
     update_time(clock1, clock2, clock_init);
     draw_timer(clock1, jActuel);
   }
+
+  /*On appelle la fonction de save en fonction de la variable save_button*/
   switch(save_button){
     case 1:
       save(board, jActuel, 1, morts_w, morts_b, clock1, clock2);

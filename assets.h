@@ -146,6 +146,6 @@ void set_local_time(Montre *clock);
 void update_time(Montre *clock1, Montre *clock2, Montre clock_init);
 void set_clock(Montre *clock);
 
-/*-------------------Module de choix de plateau----------------------*/
+/*-------------------Module editor----------------------*/
 
 void editor(Piece *board[][8], Piece *set_pieces);

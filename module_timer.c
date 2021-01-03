@@ -29,6 +29,7 @@ void set_clock(Montre *clock){
   clock->s = 0;
 }
 
+/*On met à jour clock1 en lui assignant le temps actuel moins la somme du temps de début de partie à celui de l'autre joueur*/
 void update_time(Montre *clock1, Montre *clock2, Montre clock_init){
   Montre local;
   set_local_time(&local);
