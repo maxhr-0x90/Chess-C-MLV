@@ -96,7 +96,7 @@ void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoire
 
 /*GESTION DU CLIC*/
 
-Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b, int *Save){
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, Montre *clock1, Montre *clock2, Montre clock_init, int *morts_w, int *morts_b, int *Save){
   Coord map;
   int x, y;
   int save_button = 0;
@@ -132,27 +132,27 @@ Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *cl
   }
   switch(save_button){
     case 1:
-      save(board, jActuel, 1, morts_w, morts_b);
+      save(board, jActuel, 1, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     case 2:
-      save(board, jActuel, 2, morts_w, morts_b);
+      save(board, jActuel, 2, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     case 3:
-      save(board, jActuel, 3, morts_w, morts_b);
+      save(board, jActuel, 3, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     case 4:
-      save(board, jActuel, 4, morts_w, morts_b);
+      save(board, jActuel, 4, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     case 5:
-      save(board, jActuel, 5, morts_w, morts_b);
+      save(board, jActuel, 5, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     case 6:
-      save(board, jActuel, 6, morts_w, morts_b);
+      save(board, jActuel, 6, morts_w, morts_b, clock1, clock2);
       Save[0] = 1;
       return map;
     default:
@@ -341,7 +341,7 @@ int choix_piece_pion(Joueur color){
   return choix;
 }
 
-void draw_timer(montre *clock, Joueur jActuel){
+void draw_timer(Montre *clock, Joueur jActuel){
    MLV_Font *font;
    char montre[20];
 

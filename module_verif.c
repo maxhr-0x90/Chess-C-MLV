@@ -691,7 +691,7 @@ void pion_ligne_finale(Piece *board[][8], Coord xy){
 }
 
 /*Mise à jour / Conservation de la cohérence du jeu*/
-void maj_board(Piece *board[][8], Coord old, Coord new){
+void maj_board(Piece *board[][8], Coord old, Coord new, int *morts_w, int *morts_b){
   int i, j;
   Piece *piece_deplacee = board[new.y][new.x];
   piece_deplacee->nbMouv += 1;
@@ -702,12 +702,18 @@ void maj_board(Piece *board[][8], Coord old, Coord new){
       if (board[new.y - 1][new.x] != NULL) {
         if (board[new.y - 1][new.x]->move.ajustement[0] > 9) {
           board[new.y - 1][new.x] = NULL;
+          morts_w[morts_w[0]+1] = Pion;
+          morts_w[0]++;
+          printf("%d\n", morts_w[morts_w[0]]);
         }
       }
     } else if (piece_deplacee->couleur == Blanc) {
       if (board[new.y + 1][new.x] != NULL) {
         if (board[new.y + 1][new.x]->move.ajustement[0] > 9) {
           board[new.y + 1][new.x] = NULL;
+          morts_b[morts_b[0]+1] = Pion;
+          morts_b[0]++;
+          printf("%d\n", morts_b[morts_b[0]]);
         }
       }
     }

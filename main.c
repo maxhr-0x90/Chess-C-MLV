@@ -18,8 +18,8 @@ int main(){
         break;
       case Load:
         endgame = jeu(save_state(), scores);
-        screen_fin_partie(endgame);
         if(endgame != -1){
+          screen_fin_partie(endgame);
           if (endgame != 2) {
             update_leaderboard(scores);
           }

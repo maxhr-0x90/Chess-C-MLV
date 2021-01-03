@@ -60,7 +60,7 @@ typedef struct
 	int h;
 	int m;
 	int s;
-} montre;
+} Montre;
 
 /*----------------------Module mathématique------------------------*/
 int sgn(int i);
@@ -87,7 +87,7 @@ int est_echec_et_mat(Piece *board[][8], Joueur color);
 int est_pat(Piece *board[][8], Joueur color);
 int seulement_rois(Piece *board[][8]);
 void pion_ligne_finale(Piece *board[][8], Coord xy);
-void maj_board(Piece *board[][8], Coord old, Coord new);
+void maj_board(Piece *board[][8], Coord old, Coord new, int *morts_w, int *morts_b);
 
 /*-----------------------Module graphique--------------------------*/
 
@@ -95,13 +95,13 @@ void make_grid();
 void color_piece();
 void indic_deplace(Piece *board[][8], Coord pos, int *moves);
 void actualise_plateau(Piece *board[][8], Coord pos, int *moves, int trajectoires);
-Coord clic_or_save(Piece *board[][8], Joueur jActuel, montre *clock1, montre *clock2, montre clock_init, int *morts_w, int *morts_b, int *Save);
+Coord clic_or_save(Piece *board[][8], Joueur jActuel, Montre *clock1, Montre *clock2, Montre clock_init, int *morts_w, int *morts_b, int *Save);
 void screen_fin_partie(Joueur color);
 void affichage_save();
 void aff_leaderboard();
 int save_state();
 int choix_piece_pion(Joueur color);
-void draw_timer(montre *clock, Joueur jActuel);
+void draw_timer(Montre *clock, Joueur jActuel);
 void actualise_morts(int *morts_w, int *morts_b);
 void dessiner_pieces(int emplacement);
 
@@ -132,19 +132,19 @@ int jeu(int choix, int *scores);
 
 /*---------------------Module de sauvegarde-------------------------*/
 
-void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b);
-Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b);
+void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b, Montre *clock1, Montre *clock2);
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b, Montre *clock1, Montre *clock2);
 void lect_pseudos(JLeaderboard *j1, JLeaderboard *j2);
 int lecture_leaderboard(JLeaderboard Leaderboard[10]);
 void update_leaderboard(int scores[2]);
 
 /*------------------------Module du timer----------------------------*/
 
-int compt_sec(montre *clock);
-void reinject_clock(montre *clock, int sec);
-void set_local_time(montre *clock);
-void update_time(montre *clock1, montre *clock2, montre clock_init);
-void set_clock(montre *clock);
+int compt_sec(Montre *clock);
+void reinject_clock(Montre *clock, int sec);
+void set_local_time(Montre *clock);
+void update_time(Montre *clock1, Montre *clock2, Montre clock_init);
+void set_clock(Montre *clock);
 
 /*-------------------Module de choix de plateau----------------------*/
 

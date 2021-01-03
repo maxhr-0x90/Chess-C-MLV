@@ -9,7 +9,7 @@ int jeu(int choix, int *scores){
   Config jeu;
   MLV_Sound* move_sound;
   MLV_Music *music1;
-  montre clock_init, clock_white, clock_black;
+  Montre clock_init, clock_white, clock_black;
 
   if(choix == 8){
     editor(jeu.echiquier, set_piece);
@@ -18,15 +18,11 @@ int jeu(int choix, int *scores){
     morts_w[0] = 0;
   }
 
-  set_local_time(&clock_init);
-  set_clock(&clock_white);
-  set_clock(&clock_black);
-  update_time(&clock_white, &clock_black, clock_init);
 
   MLV_create_window("jeu", "jeu", CASE*8, CASE*10);
   MLV_init_audio();
   move_sound = MLV_load_sound("ressources/OST/move.wav");
-  music1 = MLV_load_music("ressources/OST/balade1.mp3");
+  music1 = MLV_load_music("ressources/OST/balade1.wav");
   mat = FALSE;
   pat = FALSE;
 
@@ -36,15 +32,24 @@ int jeu(int choix, int *scores){
     morts_b[0] = 0;
     morts_w[0] = 0;
   }
+
+  set_clock(&clock_white);
+  set_clock(&clock_black);
+  set_local_time(&clock_init);
   if(0 < choix && choix < 8){
-    jeu.jActuel = load(jeu.echiquier, set_piece, choix, morts_w, morts_b);
+    jeu.jActuel = load(jeu.echiquier, set_piece, choix, morts_w, morts_b, &clock_white, &clock_black);
+    reinject_clock(&clock_init, compt_sec(&clock_init)-(compt_sec(&clock_white) + compt_sec(&clock_black)));
   }
+  else{
+    update_time(&clock_white, &clock_black, clock_init);
+  }
+
   actualise_plateau(jeu.echiquier, pos, moves, FALSE);
   actualise_morts(morts_w, morts_b);
   draw_timer(&clock_white, Blanc);
-  draw_timer(&clock_white, Noir);
+  draw_timer(&clock_black, Noir);
   affichage_save();
-  MLV_play_music(music1, 0.6, 1);
+  MLV_play_music(music1, 0.6, -1);
   while(!mat && !pat && !save){
     pos.x = -1;
     while(pos.x == -1){
@@ -84,7 +89,7 @@ int jeu(int choix, int *scores){
         }
         jeu.echiquier[target.y][target.x] = jeu.echiquier[pos.y][pos.x];
         jeu.echiquier[pos.y][pos.x] = NULL;
-        maj_board(jeu.echiquier, pos, target);
+        maj_board(jeu.echiquier, pos, target, morts_w, morts_b);
         jeu.jActuel = (jeu.jActuel+1)%2;
         MLV_play_sound(move_sound, 0.2);
       }

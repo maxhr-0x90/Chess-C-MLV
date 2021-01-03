@@ -14,9 +14,9 @@ ChoixMenu menu(){
   MLV_init_audio();
 
   image = MLV_load_image("ressources/assets/issou_corp.png");
-  menu1 = MLV_load_music("ressources/OST/menu1.mp3");
-  menu2 = MLV_load_music("ressources/OST/menu2.mp3");
-  menu_intro = MLV_load_music("ressources/OST/menu_intro.mp3");
+  menu1 = MLV_load_music("ressources/OST/menu1.wav");
+  menu2 = MLV_load_music("ressources/OST/menu2.wav");
+  menu_intro = MLV_load_music("ressources/OST/menu_intro.wav");
   font1 = MLV_load_font("ressources/polices/TravelingTypewriter.ttf", 40);
   font2 = MLV_load_font("ressources/polices/police_anc.ttf", 200);
 

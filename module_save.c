@@ -2,14 +2,17 @@
 
 /*------Fonction permettant la sauvegarde de la matrice de jeu------*/
 
-void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b){
+void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *morts_b, Montre *clock1, Montre *clock2){
   int i, j, x;
   FILE* save = NULL;
   char save_name[12];
+
+  /*On prend le chemin de la save state en fonction du numéro choisi dans la fonction dédiée et on l'ouvre*/
   sprintf(save_name, "saves/save%d", save_state);
   remove(save_name);
   save = fopen(save_name, "a+");
 
+  /*On calcule le nombre de pièce afin de faire une boucle for dans la fonction load et non une boucle while*/
   x = 0;
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
@@ -18,8 +21,12 @@ void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *
       }
     }
   }
+
+  /*On met dans le fichier le joueur actuel ainsi que le nombre de pièce dans le plateau*/
   fputc(jActuel, save);
   fputc(x, save);
+
+  /*On insère les coordonnées et toutes les caractéristiques des pièces dans le fichier*/
   for(i = 0; i < 8; i++){
     for(j = 0; j < 8; j++){
       if(board[i][j] != NULL){
@@ -39,6 +46,8 @@ void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *
       }
     }
   }
+
+  /*On insère le nombre et le rang des pièces mortes dans le fichier*/
   fputc(morts_w[0], save);
   for(i = 1; i < morts_w[0]+1; i++){
     fputc(morts_w[i], save);
@@ -47,25 +56,39 @@ void save(Piece *board[][8], Joueur jActuel, int save_state, int *morts_w, int *
   for(i = 1; i < morts_b[0]+1; i++){
     fputc(morts_b[i], save);
   }
+
+  /*On insère le temps de jeu des deux joueurs dans le fichier*/
+  fputc(clock2->h, save);
+  fputc(clock2->m, save);
+  fputc(clock2->s, save);
+  fputc(clock1->h, save);
+  fputc(clock1->m, save);
+  fputc(clock1->s, save);
+
   fclose(save);
 }
 
 /*------Fonction permettant le chargement de la matrice de jeu------*/
 
-Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b){
+Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, int *morts_b, Montre *clock1, Montre *clock2){
   int i, j, x, y;
   Joueur jActuel;
   FILE* save = NULL;
   char save_name[12];
+
+  /*On prend le chemin de la save state en fonction du numéro choisi dans la fonction dédiée et on l'ouvre*/
   sprintf(save_name, "saves/save%d", save_state);
   save = fopen(save_name, "r+");
 
+  /*On récupère le joueur actuel ainsi que le nombre de pièce dont l'on se servira dans la prochaine boucle for*/
   jActuel = fgetc(save);
   i = 0;
   j = fgetc(save);
 
+  /*On vide le plateau*/
   vider_plateau(board);
   for(i = 0; i < j; i++){
+    /*On récupère les coordonnées des pièces et on insère les caractéristiques des pièces à leur emplacements*/
 
     x = fgetc(save);
     y = fgetc(save);
@@ -82,6 +105,8 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, i
     }
     board[x][y] = &pieces[i];
   }
+
+  /*On réinjecte le nombre et le rang des pièces mortes*/
   morts_w[0] = fgetc(save);
   for(i = 1; i < morts_w[0]+1; i++){
     morts_w[i] = fgetc(save);
@@ -90,6 +115,15 @@ Joueur load(Piece *board[][8], Piece pieces[32], int save_state, int *morts_w, i
   for(i = 1; i < morts_b[0]+1; i++){
     morts_b[i] = fgetc(save);
   }
+
+  /*On remet le temps de partie à la sauvegarde dans les struct Montre*/
+  clock1->h = fgetc(save);
+  clock1->m = fgetc(save);
+  clock1->s = fgetc(save);
+  clock2->h = fgetc(save);
+  clock2->m = fgetc(save);
+  clock2->s = fgetc(save);
+
   fclose(save);
   return jActuel;
 }
